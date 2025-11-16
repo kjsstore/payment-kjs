@@ -1,210 +1,232 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KJS STORE – Produk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment KJS STORE</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #0d0d0d;
-        color: white;
-        text-align: center;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    :root {
+        --gold: #d4af37;
+        --gold-light: #f5d67a;
+        --gold-dark: #a9862a;
+        --black: #0b0b0b;
+        --glass: rgba(255, 255, 255, 0.05);
     }
 
-    .header {
-        padding: 25px;
-        background: linear-gradient(135deg, #1a1a1a, #000000);
-        border-bottom: 2px solid gold;
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: radial-gradient(circle, #1b1b1b, #000000);
+        margin: 0;
+        padding: 0;
+        color: var(--gold);
+        overflow-x: hidden;
+    }
+
+    .gold-particles {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        top: 0;
+        left: 0;
+        background-image:
+            radial-gradient(circle, var(--gold-light) 2px, transparent 3px),
+            radial-gradient(circle, var(--gold-dark) 2px, transparent 3px),
+            radial-gradient(circle, var(--gold) 1.5px, transparent 2px);
+        background-size: 150px 150px, 200px 200px, 250px 250px;
+        animation: moveParticles 40s linear infinite;
+        opacity: .18;
+        z-index: 1;
+    }
+
+    @keyframes moveParticles {
+        0% { background-position: 0 0; }
+        100% { background-position: 500px 500px; }
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 30px;
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        box-shadow: 0 0 20px var(--gold-dark), inset 0 0 10px #272727;
+        border: 1px solid rgba(255, 255, 255, .08);
     }
 
     h1 {
-        font-size: 28px;
-        margin: 0;
-        color: gold;
-        letter-spacing: 1px;
+        text-align: center;
+        font-size: 2.6rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 15px var(--gold-dark);
+        font-weight: 700;
     }
 
-    .product-buttons {
-        margin: 20px auto;
-        max-width: 400px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+    .sub {
+        text-align: center;
+        font-size: 1.1rem;
+        color: var(--gold-light);
+        margin-bottom: 35px;
     }
 
-    .btn {
-        padding: 15px;
-        background: #1e1e1e;
-        border: 2px solid gold;
+    .pay-box {
+        background: rgba(255, 255, 255, .06);
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 18px;
+        box-shadow: 0 0 15px #634c17;
+        border: 1px solid rgba(255, 255, 255, .1);
+        transition: .3s;
+    }
+
+    .pay-box:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px var(--gold);
+    }
+
+    .pay-title {
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        text-shadow: 0 0 10px var(--gold);
+    }
+
+    img.qris {
+        width: 240px;
         border-radius: 12px;
-        color: gold;
-        font-size: 18px;
-        cursor: pointer;
-        transition: 0.3s;
+        display: block;
+        margin: 0 auto 10px auto;
+        box-shadow: 0 0 15px var(--gold-dark);
     }
 
-    .btn:hover {
-        background: gold;
-        color: black;
-        transform: scale(1.03);
+    .info {
+        text-align: center;
+        color: var(--gold-light);
+        font-size: 1.1rem;
+        margin-top: 8px;
+        font-weight: 600;
     }
 
-    .card {
-        display: none;
-        margin: 25px auto;
-        width: 90%;
-        max-width: 480px;
-        background: rgba(255, 215, 0, 0.06);
-        border: 1px solid gold;
-        padding: 20px;
-        border-radius: 15px;
-        animation: fade 0.3s ease-in-out;
+    .an {
+        color: var(--gold);
+        font-size: .95rem;
+        text-align: center;
+        margin-top: 5px;
+        opacity: .9;
     }
 
-    @keyframes fade {
-        from {opacity: 0; transform: translateY(10px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
-
-    .logo-produk {
-        width: 110px;
-        height: 110px;
-        object-fit: contain;
-        margin-bottom: 15px;
-    }
-
-    .whatsapp-btn {
-        display: inline-block;
+    .copy-btn, .download-btn {
         margin-top: 12px;
-        padding: 12px 20px;
-        background: green;
-        color: white;
-        border-radius: 10px;
-        font-size: 17px;
-        text-decoration: none;
+        padding: 10px 20px;
+        background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+        border: none;
+        color: black;
         font-weight: bold;
-        transition: 0.3s;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        box-shadow: 0 0 10px var(--gold-dark);
+        transition: .3s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .whatsapp-btn:hover {
-        background: #00ff00;
-        color: black;
+    .copy-btn:hover, .download-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px var(--gold);
+    }
+
+    footer {
+        margin-top: 35px;
+        text-align: center;
+        color: var(--gold-light);
+        font-size: .9rem;
+        opacity: .7;
     }
 </style>
-
-<script>
-function showProduct(id) {
-    document.querySelectorAll(".card").forEach(c => c.style.display = "none");
-    document.getElementById(id).style.display = "block";
-}
-</script>
-
 </head>
 
 <body>
 
-<div class="header">
-    <h1>📦 PRODUK KJS STORE</h1>
+<div class="gold-particles"></div>
+
+<div class="container">
+
+    <h1>KJS STORE</h1>
+    <div class="sub">Silahkan pilih metode pembayaran di bawah ini:</div>
+
+    <!-- QRIS -->
+    <div class="pay-box">
+        <div class="pay-title">QRIS</div>
+
+        <img class="qris" id="qrisImg" src="https://files.catbox.moe/d57295.jpg" alt="QRIS KJS STORE">
+
+        <button class="download-btn" onclick="downloadQRIS()">Download QRIS</button>
+
+        <div class="info">Scan QRIS untuk melakukan pembayaran.</div>
+        <div class="an">A/N: MUHAMAD ILMI</div>
+    </div>
+
+    <!-- DANA -->
+    <div class="pay-box">
+        <div class="pay-title">DANA</div>
+        <div class="info" id="dana">083830803474</div>
+        <div class="an">A/N: MUHAMAD ILMI</div>
+        <button class="copy-btn" onclick="copyText('dana')">Copy</button>
+    </div>
+
+    <!-- OVO -->
+    <div class="pay-box">
+        <div class="pay-title">OVO</div>
+        <div class="info" id="ovo">083830803474</div>
+        <div class="an">A/N: MUHAMAD ILMI</div>
+        <button class="copy-btn" onclick="copyText('ovo')">Copy</button>
+    </div>
+
+    <!-- GOPAY -->
+    <div class="pay-box">
+        <div class="pay-title">GoPay</div>
+        <div class="info" id="gopay">083830803474</div>
+        <div class="an">A/N: MUHAMAD ILMI</div>
+        <button class="copy-btn" onclick="copyText('gopay')">Copy</button>
+    </div>
+
+    <!-- SEABANK -->
+    <div class="pay-box">
+        <div class="pay-title">SeaBank</div>
+        <div class="info" id="seabank">901083077452</div>
+        <div class="an">A/N: MUHAMAD ILMI</div>
+        <button class="copy-btn" onclick="copyText('seabank')">Copy</button>
+    </div>
+
+    <footer>
+        © 2025 KJS STORE — Premium Gold Payment Page
+    </footer>
 </div>
 
-<div class="product-buttons">
-    <button class="btn" onclick="showProduct('axis')">Paket Axis</button>
-    <button class="btn" onclick="showProduct('xl')">Paket XL</button>
-    <button class="btn" onclick="showProduct('telkomsel')">Paket Telkomsel</button>
-    <button class="btn" onclick="showProduct('tri')">Paket TRI</button>
-    <button class="btn" onclick="showProduct('indosat')">Paket Indosat</button>
-    <button class="btn" onclick="showProduct('hotspot')">Paket Hotspot</button>
-    <button class="btn" onclick="showProduct('vpn')">VPN & Premium Tools</button>
-</div>
+<script>
+function copyText(id) {
+    let text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    alert("Nomor berhasil disalin:\n" + text);
+}
 
-<!-- PRODUK 1 -->
-<div class="card" id="axis">
-    <img class="logo-produk" src="LINK_LOGO_AXIS" alt="Axis Logo">
-    <h2>Paket Axis</h2>
-    <p>
-        • 15GB 7 Hari  
-        • 30GB 30 Hari  
-        • Unlimited App  
-        • Aman & Fast Respon  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20Axis">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 2 -->
-<div class="card" id="xl">
-    <img class="logo-produk" src="LINK_LOGO_XL" alt="XL Logo">
-    <h2>Paket XL</h2>
-    <p>
-        • Promo 20rb 15GB  
-        • Full Kuota Utama  
-        • Support Semua TKP  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20XL">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 3 -->
-<div class="card" id="telkomsel">
-    <img class="logo-produk" src="LINK_LOGO_TSEL" alt="Telkomsel Logo">
-    <h2>Paket Telkomsel</h2>
-    <p>
-        • Kuota Belajar  
-        • Kuota Internet Reguler  
-        • Harga Termurah  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20Telkomsel">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 4 -->
-<div class="card" id="tri">
-    <img class="logo-produk" src="LINK_LOGO_TRI" alt="Tri Logo">
-    <h2>Paket TRI</h2>
-    <p>
-        • 25GB 25rb  
-        • 40GB 30rb  
-        • Masa Aktif Panjang  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20Tri">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 5 -->
-<div class="card" id="indosat">
-    <img class="logo-produk" src="LINK_LOGO_INDOSAT" alt="Indosat Logo">
-    <h2>Paket Indosat</h2>
-    <p>
-        • Internet Yellow  
-        • Freedom Internet  
-        • Harga Pelajar  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20Indosat">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 6 -->
-<div class="card" id="hotspot">
-    <img class="logo-produk" src="LINK_LOGO_WIFI" alt="Hotspot Logo">
-    <h2>Paket Hotspot</h2>
-    <p>
-        • Unlimited Hotspot  
-        • 30 Hari  
-        • No FUP  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20Paket%20Hotspot">Beli via WhatsApp</a>
-</div>
-
-<!-- PRODUK 7 -->
-<div class="card" id="vpn">
-    <img class="logo-produk" src="LINK_LOGO_VPN" alt="VPN Logo">
-    <h2>VPN & Premium Tools</h2>
-    <p>
-        • VPN All Operator  
-        • DarkTunnel  
-        • HA Tunnel  
-        • Premium Script  
-    </p>
-    <a class="whatsapp-btn" href="https://wa.me/62XXXXXXXXXX?text=Halo%20Admin,%20saya%20ingin%20beli%20VPN%20Premium">Beli via WhatsApp</a>
-</div>
+function downloadQRIS() {
+    let img = document.getElementById("qrisImg").src;
+    let link = document.createElement("a");
+    link.href = img;
+    link.download = "QRIS-KJS-STORE.jpg";
+    link.click();
+}
+</script>
 
 </body>
 </html>
