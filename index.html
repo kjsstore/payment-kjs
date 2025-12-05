@@ -3,56 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasir Otomatis - by kjsstore</title>
+    <title>KJS Store | Payment Gateway</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* Variabel CSS: TEMA PREMIUM DENGAN GLOW */
+        /* ======================================= */
+        /* ===      KJS STORE: CORE THEME      === */
+        /* ======================================= */
         :root {
             --dark-bg: #0d0d10;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-color: hsl(0, 0%, 94%);
-            --accent-color: #00bcd4;
+            --glass-bg: rgba(255, 255, 255, 0.08); 
+            --border-color: rgba(255, 255, 255, 0.15);
+            --text-color: #f0f0f0;
             
-            /* WARNA ASLI DAN WARNA GLOW */
-            --dana-color: #1c90e8;
-            --dana-glow: #006aff; 
-            --gopay-color: #00a656;
-            --gopay-glow: #38b671;
-            --ovo-color: #5a2082;
-            --ovo-glow: #9e46eb;
-            --seabank-color: #4CAF50;
-            --seabank-glow: #71ff71;
-            --qris-color: #6c7a89;
-            --qris-glow: #b3b3b3;
+            /* Warna Aksen Utama */
+            --accent-color: #00bcd4; /* Cyan */
+            --accent-glow: #38ffff;
             
-            --copy-btn-color: #ff9800;
+            /* Warna Status Bank */
+            --online-color: #4CAF50; 
+            --online-glow: #98FF98;
+            --offline-color: #FF5252; 
+            --offline-glow: #FF9999;
+
+            /* Warna Brand */
+            --dana-color: #118eea;
+            --gopay-color: #00a535;
+            --ovo-color: #4c3494;
+            --seabank-color: #ff5900;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #121215 0%, #0d0d10 100%);
+            background: linear-gradient(135deg, #121215 0%, #08080a 100%);
             color: var(--text-color);
             margin: 0;
-            padding: 0;
+            padding: 20px 10px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
             overflow-x: hidden;
+            box-sizing: border-box;
         }
 
         .container {
             width: 100%;
-            max-width: 450px;
-            padding: 20px;
-            box-sizing: border-box;
-            margin-top: 30px;
+            max-width: 420px;
+            margin: 0 auto;
         }
 
-        /* HEADER STYLE */
+        /* HEADER */
         .header {
             text-align: center;
             margin-bottom: 20px;
@@ -61,369 +64,320 @@
             margin: 0;
             font-weight: 700;
             color: var(--accent-color);
-            font-size: 1.8rem;
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
         }
         .header p {
             margin: 5px 0 0;
-            font-weight: 400;
+            font-weight: 300;
+            font-size: 0.85rem;
+            color: #b0b0b0;
         }
         
-        /* GLASSMOPHISM CARD STYLE */
+        /* CARD STYLE (GLASSMORPHISM) */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
             border: 1px solid var(--border-color);
             padding: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* TABS */
+        /* NAVIGATION TABS */
         .method-toggle {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-            margin-bottom: 25px;
+            gap: 8px;
+            margin-bottom: 20px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             padding: 5px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .toggle-item {
             text-align: center;
-            padding: 10px 5px;
+            padding: 8px 2px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-            font-size: 0.75rem;
-            color: #b0b0b0;
+            font-size: 0.65rem; 
+            color: #888;
+            height: 60px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            white-space: nowrap;
-            height: 70px; /* Tinggi seragam untuk logo */
             justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
-        /* STYLE LOGO ASLI */
         .toggle-item img.logo-icon {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-            margin-bottom: 3px;
-            filter: grayscale(100%) brightness(1.5); /* Logo abu-abu saat tidak aktif */
-            transition: filter 0.3s, box-shadow 0.3s;
-        }
-
-        /* LOGO AKTIF DAN EFEK NEON */
-        .toggle-item.active img.logo-icon {
-            filter: none; /* Logo kembali berwarna saat aktif */
+            width: 24px;
+            height: 24px;
+            filter: grayscale(100%) brightness(0.7);
+            margin-bottom: 4px;
+            transition: all 0.3s;
+            border-radius: 4px;
         }
 
         .toggle-item.active {
-            border: none;
             background: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+        .toggle-item.active img.logo-icon {
+            filter: none;
+            transform: scale(1.1);
         }
 
-        /* Glow Khusus per Warna/Metode */
-        #tab-qris.active { 
-            box-shadow: 0 0 8px var(--qris-glow), 0 0 15px var(--qris-glow); 
-        }
-        #tab-dana.active { 
-            box-shadow: 0 0 8px var(--dana-glow), 0 0 15px var(--dana-glow); 
-        }
-        #tab-gopay.active { 
-            box-shadow: 0 0 8px var(--gopay-glow), 0 0 15px var(--gopay-glow); 
-        }
-        #tab-ovo.active { 
-            box-shadow: 0 0 8px var(--ovo-glow), 0 0 15px var(--ovo-glow); 
-        }
-        #tab-seabank.active { 
-            box-shadow: 0 0 8px var(--seabank-glow), 0 0 15px var(--seabank-glow); 
-        }
-
-        /* ACCOUNT DETAILS */
+        /* DETAIL AKUN BOX */
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
+            padding: 8px 0;
             border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-row .value {
+            font-weight: 600;
+            color: var(--accent-color);
+            text-align: right;
         }
         
-        /* FORM DAN DETAIL PEMBAYARAN (tetap sama) */
-        .input-form-group { display: none !important; }
-        .payment-details {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            text-align: left;
+        /* QRIS SECTION */
+        .qris-payment-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
-            display: block !important; 
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .qris-scan-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+        }
+        .qris-invoice-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin: 5px 0 15px;
+            font-family: monospace;
+        }
+        .qris-box img {
+            width: 100%;
+            max-width: 220px; 
+            border-radius: 10px;
+            padding: 10px;
+            background: #fff;
+        }
+
+        .qris-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            font-size: 0.85rem; 
+            font-weight: 600;
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            flex: 1;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: transform 0.2s;
+        }
+        .action-btn:active { transform: scale(0.95); }
+        #detail-invoice-btn { background: #4CAF50; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
+        #download-qr-btn { background: #007bff; box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); }
+
+        /* PAYMENT COPY BUTTONS */
+        .payment-details {
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .payment-section h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--accent-glow);
+            font-weight: 600;
+        }
+        
+        .premium-copy-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .kjs-copy-btn {
+            background: rgba(255, 255, 255, 0.05); 
+            color: white;
+            border: 1px solid var(--accent-color);
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s;
+            width: 80%;
+        }
+        
+        .kjs-copy-btn:active { transform: scale(0.95); }
+        .kjs-copy-btn.copied {
+            background: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+
+        .kjs-btn-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+            border: 2px solid #fff;
+            object-fit: cover;
         }
 
         .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px 0;
-        }
-
-        .info-label {
-            color: #b0b0b0;
-            font-size: 0.9rem;
-        }
-
-        .copy-value {
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            color: var(--accent-color);
-            font-size: 1.1rem;
-        }
-
-        .copy-btn {
-            background-color: var(--copy-btn-color);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-left: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-            font-size: 0.9rem;
-        }
-        .copy-btn:active {
-            background-color: #00bcd4;
-        }
-        
-        .reset-btn, .action-btn:not(.download-btn) { display: none; }
-        
-        /* CUSTOM STYLE UNTUK TOMBOL DOWNLOAD */
-        .action-btn.download-btn {
-            display: block !important; 
             text-align: center;
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            background-color: var(--accent-color);
-            color: white;
-            font-weight: 600;
-            transition: background 0.3s;
-            text-decoration: none; 
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
+            margin-top: 15px;
         }
 
-        .action-btn.download-btn:hover {
-            background-color: #008c99; 
+        /* BANK STATUS GRID */
+        .bank-status-section h4 {
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
-        
-        /* Bank Status Grid */
         .bank-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-top: 15px;
         }
-
         .bank-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            display: flex; 
+            align-items: center; 
+            color: #ccc;
         }
-
         .status-icon {
-            margin-right: 8px;
-            font-size: 0.7rem;
+            margin-right: 6px;
+            font-size: 0.6rem;
         }
-
-        .online { color: #4CAF50; } /* Hijau */
-        .offline { color: #f44336; } /* Merah */
-        .gangguan { color: #ffeb3b; } /* Kuning */
         
-        /* Footer */
+        /* FOOTER */
         .footer {
             text-align: center;
+            font-size: 0.7rem;
+            color: #555;
             margin-top: 30px;
-            padding-bottom: 20px;
-            font-size: 0.8rem;
-            color: #4CAF50;
+            padding-bottom: 80px; /* Space for FAB */
         }
 
-        /* --- FLOATING ACTION BUTTON (FAB) STYLES --- */
+        /* === FLOATING ACTION BUTTON (FAB) === */
         .fab-container {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            z-index: 1000;
+            z-index: 9999;
         }
-
         .fab {
-            width: 60px;
-            height: 60px;
+            width: 55px; 
+            height: 55px;
             background-color: var(--accent-color);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease-in-out, background-color 0.3s;
-            overflow: hidden;
+            box-shadow: 0 0 15px var(--accent-glow);
+            border: 2px solid white; 
+            transition: transform 0.3s;
+            animation: pulse-fab 2s infinite;
         }
-
-        .fab:hover {
-            background-color: #008c99;
-            transform: scale(1.05);
-        }
-
+        .fab:hover { transform: scale(1.05); }
         .fab img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
+            width: 100%; height: 100%;
+            object-fit: cover; border-radius: 50%;
         }
 
         .fab-menu {
             position: absolute;
-            bottom: calc(100% + 15px);
+            bottom: 70px;
             right: 0;
             width: 200px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            border-radius: 10px;
+            background: rgba(20, 20, 25, 0.95); 
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 10px 0;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px);
-            transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
-
         .fab-menu.active {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-
-        .fab-menu ul {
-            list-style: none;
-            padding: 10px 0;
-            margin: 0;
-        }
-
+        .fab-menu ul { list-style: none; padding: 0; margin: 0; }
         .fab-menu ul li a {
-            display: block;
-            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             color: var(--text-color);
             text-decoration: none;
-            font-size: 0.95rem;
-            transition: background 0.2s, color 0.2s;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
         }
-
+        .fab-menu ul li a i { width: 25px; text-align: center; margin-right: 10px; }
         .fab-menu ul li a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.05);
             color: var(--accent-color);
+            border-left-color: var(--accent-color);
         }
 
-        .fab-menu ul li:not(:last-child) {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* ANIMATIONS */
+        @keyframes pulse-fab {
+            0% { box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 188, 212, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 188, 212, 0); }
+        }
+        @keyframes neon-pulse-online {
+            0%, 100% { color: var(--online-color); text-shadow: 0 0 2px var(--online-color); }
+            50% { color: var(--online-glow); text-shadow: 0 0 8px var(--online-glow); }
+        }
+        @keyframes neon-pulse-offline {
+            0%, 100% { color: var(--offline-color); }
+            50% { color: var(--offline-glow); }
         }
 
-        /* --- STYLE KHUSUS TOMBOL KEMET JS GLOWING UNTUK SEMUA E-WALLET/BANK --- */
-        
-        /* Animasi Berdenyut (Pulse) */
-        @keyframes kjs-glow-pulse {
-            0% {
-                box-shadow: 0 0 5px var(--dana-glow), 0 0 10px rgba(255, 255, 255, 0.2);
-                border-color: rgba(0, 106, 255, 0.5); 
-            }
-            50% {
-                box-shadow: 0 0 15px var(--dana-glow), 0 0 25px var(--accent-color), 0 0 35px var(--dana-color);
-                border-color: rgba(255, 255, 255, 0.5); 
-            }
-            100% {
-                box-shadow: 0 0 5px var(--dana-glow), 0 0 10px rgba(255, 255, 255, 0.2);
-                border-color: rgba(0, 106, 255, 0.5);
-            }
-        }
-        
-        .premium-copy-container {
-            text-align: center;
-            margin: 25px 0 20px 0;
-        }
+        .status-icon.online i { animation: neon-pulse-online 2s infinite; }
+        .status-icon.offline i { animation: neon-pulse-offline 3s infinite; }
 
-        .kjs-copy-btn {
-            background: rgba(28, 144, 232, 0.1); /* Default: DANA Transparan */
-            color: white;
-            border: 2px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: background 0.3s, transform 0.1s, box-shadow 0.3s;
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            
-            /* Neon Glow & Pulse Gabungan */
-            animation: kjs-glow-pulse 3s infinite ease-in-out;
-        }
-
-        /* Menyesuaikan warna tombol berdasarkan metode aktif (opsional) */
-        #dana-section .kjs-copy-btn { background: rgba(28, 144, 232, 0.1); }
-        #gopay-section .kjs-copy-btn { background: rgba(0, 166, 86, 0.1); }
-        #ovo-section .kjs-copy-btn { background: rgba(90, 32, 130, 0.1); }
-        #seabank-section .kjs-copy-btn { background: rgba(76, 175, 80, 0.1); }
-
-        .kjs-copy-btn:hover {
-            background: rgba(255, 255, 255, 0.1); 
-            transform: scale(1.02);
-        }
-        
-        .kjs-copy-btn:active {
-            transform: scale(0.98);
-        }
-
-        .kjs-btn-logo {
-            width: 70px; /* Ukuran Logo Toko */
-            height: 70px;
-            border-radius: 50%;
-            margin-bottom: 8px;
-            object-fit: cover;
-            border: 3px solid white; 
-        }
-
-        .kjs-btn-text {
-            color: var(--accent-color); /* Warna Teks Neon */
-            font-size: 0.95rem;
-            text-shadow: 0 0 5px var(--accent-color);
-        }
-        
-        /* State Tombol Saat Berhasil Disalin */
-        .kjs-copy-btn.copied {
-            background: #4CAF50; /* Hijau saat sukses */
-            animation: none; /* Hentikan denyutan */
-            box-shadow: 0 0 15px #4CAF50, 0 0 25px #71ff71; /* Glow Hijau */
-        }
-        
-        .kjs-copy-btn.copied .kjs-btn-text {
-             color: white;
-             text-shadow: none;
-        }
     </style>
 </head>
 <body onload="showPaymentForm('qris')">
@@ -431,320 +385,290 @@
 <div class="container">
     
     <div class="header">
-        <h2><i class="fas fa-money-check-alt"></i> KETERANGAN PAYMENT</h2>
-        <p style="font-size: 0.9rem; color: #b0b0b0;">Silahkan Pilih & Copy Metode Pembayaran di Bawah</p>
+        <h2><i class="fas fa-bolt" style="color: var(--accent-glow);"></i> PAYMENT KJS</h2>
+        <p>Pilih Metode dan Selesaikan Transaksi Anda.</p>
     </div>
     
     <div class="method-toggle">
         <div class="toggle-item active" id="tab-qris" onclick="showPaymentForm('qris')">
-            <img src="https://files.catbox.moe/aa0jc2.png" alt="QRIS Logo" class="logo-icon qris-logo">
+            <img src="https://files.catbox.moe/aa0jc2.png" alt="QRIS" class="logo-icon">
             QRIS
         </div>
         <div class="toggle-item" id="tab-dana" onclick="showPaymentForm('dana')">
-            <img src="https://files.catbox.moe/5wdd1d.jpg" alt="DANA Logo" class="logo-icon dana-logo">
+            <img src="https://files.catbox.moe/5wdd1d.jpg" alt="DANA" class="logo-icon">
             DANA
         </div>
         <div class="toggle-item" id="tab-gopay" onclick="showPaymentForm('gopay')">
-            <img src="https://files.catbox.moe/77pmjx.jpeg" alt="GoPay Logo" class="logo-icon gopay-logo">
+            <img src="https://files.catbox.moe/77pmjx.jpeg" alt="GoPay" class="logo-icon">
             GoPay
         </div>
         <div class="toggle-item" id="tab-ovo" onclick="showPaymentForm('ovo')">
-            <img src="https://files.catbox.moe/l8dejq.jpg" alt="OVO Logo" class="logo-icon ovo-logo">
+            <img src="https://files.catbox.moe/l8dejq.jpg" alt="OVO" class="logo-icon">
             OVO
         </div>
         <div class="toggle-item" id="tab-seabank" onclick="showPaymentForm('seabank')">
-            <img src="https://files.catbox.moe/jgiawt.jpg" alt="SeaBank Logo" class="logo-icon seabank-logo">
+            <img src="https://files.catbox.moe/jgiawt.jpg" alt="SeaBank" class="logo-icon">
             SeaBank
         </div>
     </div>
     
     <div class="glass-card account-details">
         <div class="detail-row">
-            <span class="label">Nama Bank/E-Wallet</span>
+            <span class="label">Metode</span>
             <span class="value" id="nama-bank">QRIS</span>
         </div>
         <div class="detail-row">
-            <span class="label">Nama Rekening</span>
+            <span class="label">Atas Nama</span>
             <span class="value" id="nama-rekening-display">KEMET JS STORE</span> 
         </div>
         <div class="detail-row">
-            <span class="label">No Tujuan</span>
+            <span class="label">Nomor Tujuan</span>
             <span class="value" id="no-rekening">SCAN QRIS DI BAWAH</span>
         </div>
     </div>
 
-    <div id="qris-section" class="glass-card payment-section" style="display: block;">
-        <h4><i class="fas fa-check-circle"></i> AUTO QRIS (Scan Selalu Aktif)</h4>
-        
-        <p style="font-weight: 600; font-size: 1.1rem; color: var(--accent-color); margin-bottom: 5px;">KEMET JS STORE</p>
-        <p style="font-size: 0.85rem; color: #b0b0b0; margin-bottom: 15px;">NMID: ID1025368344756</p>
-
-        <div class="qris-box" style="text-align: center;">
-            <img id="qris-image" 
-                src="https://files.catbox.moe/oeuhgx.jpeg" 
-                alt="QR Code Kemet JS Store" 
-                style="width: 80%; max-width: 250px; height: auto; border-radius: 5px; background: white; padding: 10px;">
+    <div id="qris-section" class="qris-payment-box payment-section">
+        <div>
+            <p class="qris-scan-label">Pindai Untuk Membayar</p>
+            <p class="qris-invoice-label">Invoice: DEPOSIT-302305606</p>
         </div>
-
-        <a href="https://files.catbox.moe/oeuhgx.jpeg" 
-            download="https://files.catbox.moe/oeuhgx.jpeg" 
-            class="action-btn download-btn">
-             <i class="fas fa-download"></i> Download QRIS
-        </a>
         
-        <p style="font-size: 0.85rem; margin-top: 15px; color: #b0b0b0;">Silahkan pindai atau unduh QRIS ini. Nominal bisa diatur saat Anda scan.</p>
+        <div class="qris-box">
+            <img src="https://files.catbox.moe/oeuhgx.jpeg" alt="QR Code">
+        </div>
+        
+        <div class="qris-actions">
+            <a href="#" class="action-btn" id="detail-invoice-btn">
+                <i class="fas fa-receipt"></i> Cek Status
+            </a>
+            <a href="https://files.catbox.moe/oeuhgx.jpeg" download="qris_kemet_js_store.jpeg" class="action-btn" id="download-qr-btn">
+                <i class="fas fa-download"></i> Simpan QR
+            </a>
+        </div>
     </div>
-    
-    <div id="dana-section" class="glass-card payment-section" style="display: none;">
-        <h4><i class="fas fa-money-check-alt"></i> Detail Pembayaran DANA Premium</h4>
 
-        <div class="payment-details" id="dana-details">
-            <p style="text-align: center; color: var(--text-color); font-weight: 600; margin-bottom: 20px;">
-                KLIK LOGO DI BAWAH UNTUK MENYALIN NO. DANA!
-            </p>
-            
+    <div id="dana-section" class="glass-card payment-section" style="display: none;">
+        <h4><i class="fas fa-wallet"></i> Transfer DANA</h4>
+        <div class="payment-details" style="background: rgba(28, 144, 232, 0.1);">
             <div class="premium-copy-container">
-                <button class="kjs-copy-btn" 
-                        id="dana-copy-button" 
-                        onclick="copyToClipboard('dana-copy-rek-value', this)">
-                    <img src="https://files.catbox.moe/5wdd1d.jpg" alt="Logo Kemet JS Store" class="kjs-btn-logo">
-                    <span class="kjs-btn-text">SALIN NO. DANA</span>
+                <button class="kjs-copy-btn" onclick="copyToClipboard('dana-copy-rek-value', this)" style="border-color: var(--dana-color);">
+                    <img src="https://files.catbox.moe/5wdd1d.jpg" alt="DANA" class="kjs-btn-logo">
+                    <span class="kjs-btn-text" style="color: var(--dana-color);">SALIN NOMOR DANA</span>
                 </button>
                 <span id="dana-copy-rek-value" style="display: none;">083830803474</span>
             </div>
-            
-            <div class="info-row" style="padding-top: 15px; justify-content: center; text-align: center;">
-                <span class="info-label" style="font-size: 0.9rem; color: #b0b0b0;">
-                    Nomor DANA: <strong style="color: var(--dana-color); font-size: 1.1rem;">083830803474</strong>
-                </span>
-                <p style="font-size: 0.75rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
+            <div class="info-row">
+                <span style="color: #b0b0b0;">Nomor: <strong style="color: var(--dana-color);">083830803474</strong></span>
+                <p style="font-size: 0.7rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
             </div>
         </div>
     </div>
-    
+
     <div id="gopay-section" class="glass-card payment-section" style="display: none;">
-        <h4><i class="fas fa-money-check-alt"></i> Detail Pembayaran GoPay Premium</h4>
-        <div class="payment-details" id="gopay-details">
-            <p style="text-align: center; color: var(--text-color); font-weight: 600; margin-bottom: 20px;">
-                KLIK LOGO DI BAWAH UNTUK MENYALIN NO. GOPAY!
-            </p>
-            
+        <h4><i class="fas fa-wallet"></i> Transfer GoPay</h4>
+        <div class="payment-details" style="background: rgba(0, 166, 86, 0.1);">
             <div class="premium-copy-container">
-                <button class="kjs-copy-btn" 
-                        id="gopay-copy-button" 
-                        onclick="copyToClipboard('gopay-copy-rek-value', this)">
-                    <img src="https://files.catbox.moe/77pmjx.jpeg" alt="Logo Kemet JS Store" class="kjs-btn-logo">
-                    <span class="kjs-btn-text">SALIN NO. GOPAY</span>
+                <button class="kjs-copy-btn" onclick="copyToClipboard('gopay-copy-rek-value', this)" style="border-color: var(--gopay-color);">
+                    <img src="https://files.catbox.moe/77pmjx.jpeg" alt="GoPay" class="kjs-btn-logo">
+                    <span class="kjs-btn-text" style="color: var(--gopay-color);">SALIN NOMOR GOPAY</span>
                 </button>
                 <span id="gopay-copy-rek-value" style="display: none;">083830803474</span>
             </div>
-            
-            <div class="info-row" style="padding-top: 15px; justify-content: center; text-align: center;">
-                <span class="info-label" style="font-size: 0.9rem; color: #b0b0b0;">
-                    Nomor GoPay: <strong style="color: var(--gopay-color); font-size: 1.1rem;">083830803474</strong>
-                </span>
-                <p style="font-size: 0.75rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
+            <div class="info-row">
+                <span style="color: #b0b0b0;">Nomor: <strong style="color: var(--gopay-color);">083830803474</strong></span>
+                <p style="font-size: 0.7rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
             </div>
         </div>
     </div>
-    
-    <div id="ovo-section" class="glass-card payment-section" style="display: none;">
-        <h4><i class="fas fa-money-check-alt"></i> Detail Pembayaran OVO Premium</h4>
-        <div class="payment-details" id="ovo-details">
-            <p style="text-align: center; color: var(--text-color); font-weight: 600; margin-bottom: 20px;">
-                KLIK LOGO DI BAWAH UNTUK MENYALIN NO. OVO!
-            </p>
 
+    <div id="ovo-section" class="glass-card payment-section" style="display: none;">
+        <h4><i class="fas fa-wallet"></i> Transfer OVO</h4>
+        <div class="payment-details" style="background: rgba(90, 32, 130, 0.1);">
             <div class="premium-copy-container">
-                <button class="kjs-copy-btn" 
-                        id="ovo-copy-button" 
-                        onclick="copyToClipboard('ovo-copy-rek-value', this)">
-                    <img src="https://files.catbox.moe/l8dejq.jpg" alt="Logo Kemet JS Store" class="kjs-btn-logo">
-                    <span class="kjs-btn-text">SALIN NO. OVO</span>
+                <button class="kjs-copy-btn" onclick="copyToClipboard('ovo-copy-rek-value', this)" style="border-color: var(--ovo-color);">
+                    <img src="https://files.catbox.moe/l8dejq.jpg" alt="OVO" class="kjs-btn-logo">
+                    <span class="kjs-btn-text" style="color: var(--ovo-color);">SALIN NOMOR OVO</span>
                 </button>
                 <span id="ovo-copy-rek-value" style="display: none;">083830803474</span>
             </div>
-
-            <div class="info-row" style="padding-top: 15px; justify-content: center; text-align: center;">
-                <span class="info-label" style="font-size: 0.9rem; color: #b0b0b0;">
-                    Nomor OVO: <strong style="color: var(--ovo-color); font-size: 1.1rem;">083830803474</strong>
-                </span>
-                <p style="font-size: 0.75rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
+            <div class="info-row">
+                <span style="color: #b0b0b0;">Nomor: <strong style="color: var(--ovo-color);">083830803474</strong></span>
+                <p style="font-size: 0.7rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
             </div>
         </div>
     </div>
-    
-    <div id="seabank-section" class="glass-card payment-section" style="display: none;">
-        <h4><i class="fas fa-money-check-alt"></i> Detail Transfer SeaBank Premium</h4>
-        <div class="payment-details" id="seabank-details">
-               <p style="text-align: center; color: var(--text-color); font-weight: 600; margin-bottom: 20px;">
-                KLIK LOGO DI BAWAH UNTUK MENYALIN NO. SEABANK!
-            </p>
 
+    <div id="seabank-section" class="glass-card payment-section" style="display: none;">
+        <h4><i class="fas fa-university"></i> Transfer SeaBank</h4>
+        <div class="payment-details" style="background: rgba(255, 89, 0, 0.1);">
             <div class="premium-copy-container">
-                <button class="kjs-copy-btn" 
-                        id="seabank-copy-button" 
-                        onclick="copyToClipboard('seabank-copy-rek-value', this)">
-                    <img src="https://files.catbox.moe/jgiawt.jpg" alt="Logo Kemet JS Store" class="kjs-btn-logo">
-                    <span class="kjs-btn-text">SALIN NO. SEABANK</span>
+                <button class="kjs-copy-btn" onclick="copyToClipboard('seabank-copy-rek-value', this)" style="border-color: var(--seabank-color);">
+                    <img src="https://files.catbox.moe/jgiawt.jpg" alt="SeaBank" class="kjs-btn-logo">
+                    <span class="kjs-btn-text" style="color: var(--seabank-color);">SALIN NO. SEABANK</span>
                 </button>
                 <span id="seabank-copy-rek-value" style="display: none;">901083077452</span>
             </div>
-
-            <div class="info-row" style="padding-top: 15px; justify-content: center; text-align: center;">
-                <span class="info-label" style="font-size: 0.9rem; color: #b0b0b0;">
-                    Nomor SeaBank: <strong style="color: var(--seabank-color); font-size: 1.1rem;">901083077452</strong>
-                </span>
-                <p style="font-size: 0.75rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
+            <div class="info-row">
+                <span style="color: #b0b0b0;">Nomor: <strong style="color: var(--seabank-color);">901083077452</strong></span>
+                <p style="font-size: 0.7rem; color: #ffeb3b; margin-top: 5px;">*Minimal Transfer Rp 10.000</p>
             </div>
         </div>
     </div>
     
     <div class="glass-card bank-status-section">
-        <h4><i class="fas fa-chart-line"></i> Bank Status</h4>
+        <h4><i class="fas fa-signal"></i> Status Layanan</h4>
         
         <div class="bank-grid">
             <div class="bank-item"><span class="status-icon offline"><i class="fas fa-circle"></i></span> BCA</div>
             <div class="bank-item"><span class="status-icon offline"><i class="fas fa-circle"></i></span> BNI</div>
             <div class="bank-item"><span class="status-icon offline"><i class="fas fa-circle"></i></span> BRI</div>
-            <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> Gopay</div>
+            
+            <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> GoPay</div>
             <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> OVO</div>
-            <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> Dana</div>
+            <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> DANA</div>
             <div class="bank-item"><span class="status-icon online"><i class="fas fa-circle"></i></span> SeaBank</div>
+            
             <div class="bank-item"><span class="status-icon offline"><i class="fas fa-circle"></i></span> Mandiri</div>
             <div class="bank-item"><span class="status-icon offline"><i class="fas fa-circle"></i></span> CIMB</div>
         </div>
     </div>
-    
+
     <div class="footer">
-        © 2025 KJS STORE — Futuristic Payment System
+        &copy; 2025 KJS STORE. All Rights Reserved.
     </div>
 </div>
 
 <div class="fab-container">
-    <div class="fab" id="mainFab">
-        <img src="https://files.catbox.moe/js5luv.webp" alt="Logo KJS">
-    </div>
     <div class="fab-menu" id="fabMenu">
         <ul>
-            <li><a href="LINK_GRUP_ANDA" target="_blank"><i class="fab fa-telegram-plane"></i> Gabung Group</a></li>
-            <li><a href="LINK_SALURAN_ANDA" target="_blank"><i class="fas fa-bullhorn"></i> Saluran Saya</a></li>
-            <li><a href="LINK_KONTAK_PRIBADI_ADMIN" target="_blank"><i class="fas fa-headset"></i> Kontak Pribadi Admin</a></li>
-            <li><a href="LINK_GRUP_LAINNYA" target="_blank"><i class="fas fa-users"></i> Group Lainnya</a></li>
-            <li><a href="LINK_KETERANGAN" target="_blank"><i class="fas fa-info-circle"></i> Keterangan</a></li>
+            <li><a href="LINK_GRUP_TELEGRAM" target="_blank"><i class="fab fa-telegram-plane"></i> Join Group</a></li>
+            <li><a href="LINK_SALURAN_WHATSAPP" target="_blank"><i class="fas fa-bullhorn"></i> Info Saluran</a></li>
+            <li><a href="https://wa.me/NOMOR_ADMIN" target="_blank"><i class="fas fa-headset"></i> Chat Admin</a></li>
+            <li><a href="#" target="_blank"><i class="fas fa-info-circle"></i> Syarat & Ketentuan</a></li>
         </ul>
+    </div>
+    <div class="fab" id="mainFab">
+        <img src="https://files.catbox.moe/js5luv.webp" alt="Menu"> 
     </div>
 </div>
 
 <script>
-    // DATA AKUN 
+    // === DATA REKENING ===
     const ACCOUNT_DATA = {
-        'qris': { 
-            nama: 'QRIS', 
-            noRek: 'SCAN QRIS DI BAWAH', 
-            namaRek: 'KEMET JS STORE' 
-        },
-        'dana': { 
-            nama: 'DANA E-Wallet', 
-            noRek: '083830803474', 
-            namaRek: 'Muhamad Ilmi' 
-        }, 
-        'gopay': { 
-            nama: 'GoPay E-Wallet', 
-            noRek: '083830803474', 
-            namaRek: 'Muhamad Ilmi' 
-        }, 
-        'ovo': { 
-            nama: 'OVO E-Wallet', 
-            noRek: '083830803474', 
-            namaRek: 'Muhamad Ilmi' 
-        }, 
-        'seabank': { 
-            nama: 'SeaBank', 
-            noRek: '901083077452', 
-            namaRek: 'Muhamad Ilmi' 
-        } 
+        'qris':    { nama: 'QRIS Payment', noRek: 'SCAN OTOMATIS', namaRek: 'KEMET JS STORE' },
+        'dana':    { nama: 'DANA', noRek: '083830803474', namaRek: 'Muhamad Ilmi' }, 
+        'gopay':   { nama: 'GoPay', noRek: '083830803474', namaRek: 'Muhamad Ilmi' }, 
+        'ovo':     { nama: 'OVO', noRek: '083830803474', namaRek: 'Muhamad Ilmi' }, 
+        'seabank': { nama: 'SeaBank', noRek: '901083077452', namaRek: 'Muhamad Ilmi' } 
     };
 
-    // Fungsi untuk Menyalin Teks ke Clipboard
+    // === FUNGSI COPY PASTE CANGGIH (ANTI ERROR) ===
     function copyToClipboard(elementId, buttonElement) {
-        const copyText = document.getElementById(elementId);
-        let textToCopy;
-        
-        if (copyText) {
-            textToCopy = copyText.textContent.trim();
+        const textElement = document.getElementById(elementId);
+        if (!textElement) return;
+        const textToCopy = textElement.textContent.trim();
+
+        // Cek 1: Coba pakai API modern (navigator.clipboard)
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showSuccessAnimation(buttonElement);
+            }).catch(err => {
+                // Jika error, otomatis pakai cara lama
+                console.warn('API Modern Gagal, mencoba fallback...', err);
+                fallbackCopy(textToCopy, buttonElement);
+            });
+        } else {
+            // Cek 2: Jika browser tidak support modern/bukan HTTPS, langsung pakai fallback
+            fallbackCopy(textToCopy, buttonElement);
         }
-
-        if (!textToCopy) {
-            alert("Tidak ada data untuk disalin!");
-            return;
-        }
-
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            // Logika untuk Tombol PREMIUM (kjs-copy-btn)
-            if (buttonElement && buttonElement.classList.contains('kjs-copy-btn')) {
-                const textSpan = buttonElement.querySelector('.kjs-btn-text');
-                const originalText = textSpan.textContent;
-                
-                // Tambahkan kelas copied untuk efek visual sukses
-                buttonElement.classList.add('copied');
-                textSpan.textContent = 'BERHASIL DISALIN!';
-
-                setTimeout(() => {
-                    // Kembalikan ke keadaan semula
-                    buttonElement.classList.remove('copied');
-                    textSpan.textContent = originalText;
-                }, 1500);
-            } else {
-                // Logika untuk Tombol Copy STANDAR (jika ada)
-                const copyButton = buttonElement;
-
-                const originalText = copyButton.textContent;
-                copyButton.textContent = 'Copied!';
-                copyButton.style.backgroundColor = '#4CAF50'; 
-                setTimeout(() => {
-                    copyButton.textContent = originalText;
-                    copyButton.style.backgroundColor = 'var(--copy-btn-color)'; 
-                }, 1500);
-            }
-        }).catch(err => {
-            console.error('Gagal menyalin: ', err);
-            alert('Gagal menyalin. Silakan salin manual: ' + textToCopy);
-        });
     }
 
-    // Fungsi untuk Beralih Tab/Form dan Mengubah Data Akun 
-    function showPaymentForm(method) {
-        // A. Update TABS
-        document.querySelectorAll('.toggle-item').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(`tab-${method}`).classList.add('active');
+    // === METODE CADANGAN (FALLBACK) ===
+    // Ini metode lama tapi ampuh untuk file lokal / non-https
+    function fallbackCopy(text, buttonElement) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Sembunyikan textarea agar tidak merusak tampilan
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
 
-        // B. Tampilkan Section Pembayaran yang Benar
+        try {
+            const successful = document.execCommand('copy');
+            if(successful) {
+                showSuccessAnimation(buttonElement);
+            } else {
+                alert('Gagal menyalin otomatis. Silakan salin manual: ' + text);
+            }
+        } catch (err) {
+            console.error('Fallback error:', err);
+            alert('Gagal menyalin. Silakan salin manual: ' + text);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    // === ANIMASI SUKSES ===
+    function showSuccessAnimation(buttonElement) {
+        if (!buttonElement) return;
+        
+        const textSpan = buttonElement.querySelector('.kjs-btn-text');
+        const originalText = textSpan.textContent;
+        const originalColor = textSpan.style.color;
+        
+        buttonElement.classList.add('copied');
+        textSpan.textContent = 'BERHASIL DISALIN!';
+        textSpan.style.color = 'white'; 
+
+        setTimeout(() => {
+            buttonElement.classList.remove('copied');
+            textSpan.textContent = originalText;
+            textSpan.style.color = originalColor;
+        }, 2000);
+    }
+
+    // Fungsi Ganti Tab
+    function showPaymentForm(method) {
+        document.querySelectorAll('.toggle-item').forEach(tab => tab.classList.remove('active'));
+        const activeTab = document.getElementById(`tab-${method}`);
+        if(activeTab) activeTab.classList.add('active');
+
         document.querySelectorAll('.payment-section').forEach(section => {
             section.style.display = 'none';
         });
-        document.getElementById(`${method}-section`).style.display = 'block';
+        const activeSection = document.getElementById(`${method}-section`);
+        if(activeSection) activeSection.style.display = 'block';
 
-        // C. Update Account Details Card
         const data = ACCOUNT_DATA[method];
-        document.getElementById('nama-bank').textContent = data.nama;
-        document.getElementById('nama-rekening-display').textContent = data.namaRek;
-        document.getElementById('no-rekening').textContent = data.noRek;
+        if (data) {
+            document.getElementById('nama-bank').textContent = data.nama;
+            document.getElementById('nama-rekening-display').textContent = data.namaRek;
+            document.getElementById('no-rekening').textContent = data.noRek;
+        }
     }
 
-    // Toggle FAB Menu
-    document.getElementById('mainFab').addEventListener('click', function() {
+    // Logic Tombol Melayang (FAB)
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainFab = document.getElementById('mainFab');
         const fabMenu = document.getElementById('fabMenu');
-        fabMenu.classList.toggle('active');
-    });
-
-    // Sembunyikan FAB Menu ketika klik di luar
-    document.addEventListener('click', function(event) {
         const fabContainer = document.querySelector('.fab-container');
-        const fabMenu = document.getElementById('fabMenu');
-        
-        if (!fabContainer.contains(event.target) && fabMenu.classList.contains('active')) {
-            fabMenu.classList.remove('active');
+
+        if(mainFab && fabMenu) {
+            mainFab.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                fabMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!fabContainer.contains(e.target)) {
+                    fabMenu.classList.remove('active');
+                }
+            });
         }
     });
 
