@@ -1,9 +1,365 @@
-<!-- Encoded Hard by trio -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KJS Store | Premium Gateway</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #0a0a0a;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #999999;
+            --dana: #0081ff;
+            --gopay: #00d26a;
+            --ovo: #8a2be2;
+            --seabank: #ff5a00;
+            --online: #00ff88;
+            --offline: #ff3e3e;
+        }
+
+        body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: url('background.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding: 20px 15px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: -1;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+}
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: 1px; margin: 0; color: #fff; }
+        .header p { font-size: 0.75rem; color: var(--text-dim); margin-top: 5px; }
+
+        /* PAYMENT SELECTOR */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pay-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .pay-btn .btn-label { font-weight: 700; font-size: 0.85rem; color: var(--text-dim); }
+
+        .pay-btn.active[data-type="dana"] { border-color: var(--dana); background: rgba(0, 129, 255, 0.05); }
+        .pay-btn.active[data-type="gopay"] { border-color: var(--gopay); background: rgba(0, 210, 106, 0.05); }
+        .pay-btn.active[data-type="ovo"] { border-color: var(--ovo); background: rgba(138, 43, 226, 0.05); }
+        .pay-btn.active[data-type="seabank"] { border-color: var(--seabank); background: rgba(255, 90, 0, 0.05); }
+        .pay-btn.active .btn-label { color: #fff; }
+
+        /* DISPLAY CARD (HIDDEN) */
+        #mainCard {
+            display: none;
+            background: #0d0d0d;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        #displayBank { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--active-accent); margin-bottom: 10px; }
+        .number-display { font-size: 1.6rem; font-weight: 800; margin: 10px 0; color: #fff; }
+        .name-display { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 20px; }
+
+        .copy-action {
+            background: var(--active-accent);
+            color: #000; border: none; width: 100%; padding: 14px; border-radius: 10px;
+            font-weight: 800; font-size: 0.85rem; cursor: pointer;
+        }
+
+        /* STATUS SECTION REFINED */
+        .status-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .status-header h4 { margin: 0; font-size: 0.8rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .status-header i { color: var(--online); font-size: 0.8rem; }
+
+        .bank-status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Kolom biar rapi dan g kepotong */
+            gap: 12px 20px;
+        }
+
+        .bank-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #bbb;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .dot.on { background: var(--online); box-shadow: 0 0 8px var(--online); }
+        .dot.off { background: var(--offline); box-shadow: 0 0 8px var(--offline); }
+        
+        .status-text { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; }
+        .text-on { color: var(--online); }
+        .text-off { color: var(--offline); opacity: 0.7; }
+
+        .footer-note {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: slideUp 0.3s ease-out forwards; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>✰ 𝗞𝗝𝗦 𝗦𝗧𝗢𝗥𝗘_𝗣𝗔𝗬𝗠𝗘𝗡𝗧 ⸙✰</h1>
+        <p>ꜱɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴍᴇᴛᴏᴅᴇ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴅɪ ʙᴀᴡᴀʜ ᴜɴᴛᴜᴋ ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ᴅᴇᴛᴀɪʟ👇</p>
+    </div>
+
+    <div class="payment-grid">
+    <div class="pay-btn" id="tab-dana" data-type="dana" onclick="switchMethod('dana')">
+        <span class="btn-label">💶 𝘿𝘼𝙉𝘼</span>
+    </div>
+
+    <div class="pay-btn" id="tab-gopay" data-type="gopay" onclick="switchMethod('gopay')">
+        <span class="btn-label">💵 𝙂𝙊𝙋𝘼𝙔</span>
+    </div>
+
+    <div class="pay-btn" id="tab-ovo" data-type="ovo" onclick="switchMethod('ovo')">
+        <span class="btn-label">💷 𝙊𝙑𝙊</span>
+    </div>
+
+    <div class="pay-btn" id="tab-seabank" data-type="seabank" onclick="switchMethod('seabank')">
+        <span class="btn-label">💴 𝙎𝙀𝘼𝘽𝘼𝙉𝙆</span>
+    </div>
+
+    <div class="pay-btn" id="tab-bri" data-type="bri" onclick="switchMethod('bri')">
+        <span class="btn-label">🏦 𝘽𝙍𝙄</span>
+    </div>
+
+    <div class="pay-btn" id="tab-bni" data-type="bni" onclick="switchMethod('bni')">
+        <span class="btn-label">🏦 𝘽𝙉𝙄</span>
+    </div>
+
+    <div class="pay-btn" id="tab-bca" data-type="bca" onclick="switchMethod('bca')">
+        <span class="btn-label">🏦 𝘽𝘾𝘼</span>
+    </div>
+
+    <div class="pay-btn" id="tab-mandiri" data-type="mandiri" onclick="switchMethod('mandiri')">
+        <span class="btn-label">🏦 𝙈𝘼𝙉𝘿𝙄𝙍𝙄</span>
+    </div>
+</div>
+
+    <div id="mainCard">
+        <div id="displayBank">METHOD</div>
+        <span class="number-display" id="displayNumber">00000000</span>
+        <div class="name-display" id="displayName">NAME</div>
+        <button class="copy-action" id="copyBtn" onclick="copyValue()">
+            <i class="fas fa-copy"></i> COPY NUMBER
+        </button>
+    </div>
+
+    <div class="status-container">
+        <div class="status-header">
+            <i class="fas fa-bolt"></i>
+            <h4>Server Status</h4>
+        </div>
+        
+        <div class="bank-status-grid">
+            <div class="bank-item">
+                <span>DANA</span>
+                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
+            </div>
+            <div class="bank-item">
+                <span>GOPAY</span>
+                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
+            </div>
+            <div class="bank-item">
+                <span>OVO</span>
+                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
+            </div>
+            <div class="bank-item">
+                <span>SEABANK</span>
+                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
+            </div>
+            <div class="bank-item">
+                <span>BCA</span>
+                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
+            </div>
+            <div class="bank-item">
+                <span>BRI</span>
+                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
+            </div>
+            <div class="bank-item">
+                <span>BNI</span>
+                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
+            </div>
+            <div class="bank-item">
+                <span>MANDIRI</span>
+                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <i class="fas fa-info-circle"></i> Selesaikan pembayaran lalu kirim bukti transfer ke Admin untuk verifikasi.
+    </div>
+</div>
+
 <script>
-let okQYOx = ["VUVOR1JWUXdUbFZYVmtKR1NVZG9NR0pYZHl0RGFuaHZaRWN4YzBsSGVHaGli","V001U1cxc2EwbHFORXRRUjJoc1dWZFJLME5wUVdkSlEwRTRZbGRXTUZsVFFt","cGhSMFo1WXpKV01GQlRTbFpXUlZsMFQwTkpLME5wUVdkSlEwRTRZbGRXTUZs","VFFuVlpWekZzVUZOS01tRlhWak5qUnpsNVpFTkpaMWt5T1hWa1IxWjFaRVF3","YVdReWJHdGtSMmM1V2tkV01tRlhUbXhNV0dSd1draFNiMHhEUW5CaWJXd3dZ","VmRHYzB4WVRtcFpWM2hzVUZSRmRVMURTU3REYVVGblNVTkJPR1JIYkRCaVIx","VXJVekJ3VkVsR1RqQmlNMHBzU1VoM1oxVklTbXhpVjJ3eFlsTkNTRmxZVW14","a01rWTFVRU01TUdGWVVuTmFWRFJMU1VOQlowbEJiMmRKUTBGblVFZDRjR0p0","YzJkaFNFcHNXbW93YVdGSVVqQmpTRTAyVEhrNWJXSXlOVEJqZVRWdVlqSTVi","bUpIVm1oalIyeDZURzFPZG1KVE9XcGpNMDE1VURKYWFHSlhiSE5sVkRGUllr","aFdla3N3Y0doaE1rWjVaRWRGY2xVeVJuVmplbkF6V2pKb01GRkVVWGROUkhN","eVRVUkJOMDU2UVhkUGVtZDNUVU5hYTJGWVRuZGlSMFkxVUZoT00xbFlRV2xK","U0Vwc1lrUXdhV016VWpWaVIxWjZZVWRXYkdSRFNTdERhVUZuU1VOQk9HSkhi","SFZoZVVKNVdsZDNPVWx1VGpCbFYzaHNZekpvYkZwWVVXbEpSMmg1V2xkWk9V","bHRhREJrU0VKNlQyazRkbGt5VW5WaGJrMTFXVEo0ZG1SWFVtMWlSMFo1V2xN","MWFtSXlNSFpaVjNCb1pVTTVjMkZYU25wTU1scDJZbTVSZEZsWVpHeGpNamww","V2xNNE1reHFWWFZOVXpscVl6Tk5kbGxYZUhOTWJURndZbWsxYW1NelRXbFFa","MjluU1VOQlowTnBRV2RKUTBFNFl6TlNOV0pIVlN0RGFVRm5TVU5CWjBsRFFX","ZFBia3AyWWpOUloyVjNiMmRKUTBGblNVTkJaMGxEUVdkSlEwRjBURmRLYms5","cFFXcE5SRUYzVFVSQmQwOTNiMmRKUTBGblNVTkJaMGxEUVdkSlEwRjBURmRP","YUdOdFVUWkpRMDEzV1ZSQ2FFMUhSVGREYVVGblNVTkJaMGxEUVdkSlEwRm5T","VU13ZEZsdE9YbGFSMVo1VDJsQ2VWb3lTbWhMUkVreFRsTjNaMDFxVlRGTVEw","RjVUbFJWYzBsRVFYVk5SR2R3VDNkdlowbERRV2RKUTBGblNVTkJaMGxEUVhS","TVdGSnNaVWhSZEdKWFJuQmlhbTluU1RKYWJWcHRXbTFhYW5OTFNVTkJaMGxE","UVdkSlEwRm5TVU5CWjB4VE1UQmFXR2d3VEZkU2NHSlViMmRKZW1zMVQxUnJO","VTlVYzB0SlEwRm5TVU5CWjBsRFFXZEpRMEZuVEZNeGExbFhOV2hQYVVGcVRV","UkJORTFYV20xUGQyOW5TVU5CWjBsRFFXZEpRMEZuU1VOQmRFeFhaSFpqUjBZ","MVQybEJhazFFUW10TmFscG9UM2R2WjBsRFFXZEpRMEZuU1VOQlowbERRWFJN","VnpreVlucHZaMGw2YUdoTmJVcHNUV3B6UzBsRFFXZEpRMEZuU1VOQlowbERR","V2RNVXpGNldsZEdhVmxYTlhKUGFVRnFXbTFaTVZsVVFYZFBkMjluU1VOQlow","bERRV2RKUTBGblNVTkJkRXhYT1hWaVIyeDFXbFJ2WjBsNlFYZGFiVmswVDBS","elMwbERRV2RKUTBGblNVTkJaMGxEUVdkTVV6RjJXbTFhYzJGWE5XeFBhVUZx","V20xWmVscFVUbXhQZDI5blNVTkJaMGxEUVdkSlNEQkxRMmxCWjBsRFFXZEpR","MEZuV1cwNWEyVlRRamREYVVGblNVTkJaMGxEUVdkSlEwRm5TVWRhZG1KdVVY","UmFiVVowWVZkNE5VOXBRVzVWUjNneFkzbENTMWxYZEdoamJsSm9TVVpPYUdK","dVRXNU1RMEo2V1ZjMWVreFlUbXhqYld4dFQzZHZaMGxEUVdkSlEwRm5TVU5C","WjBsRFFtbFpWMDV5V2pOS2RtUlhOV3RNVjA1MllrYzVlVTlwUWpKWldFbHZU","Rk14YVZwNWF6ZERhVUZuU1VOQlowbERRV2RKUTBGblNVZE9kbUpIT1hsUGFV","SXlXVmhKYjB4VE1UQmFXR2d3VEZjeGFHRlhOSEJQZDI5blNVTkJaMGxEUVdk","SlEwRm5TVU5DZEZsWVNtNWhWelEyU1VSQk4wTnBRV2RKUTBGblNVTkJaMGxE","UVdkSlIxSndZek5DYzFsWWF6WkpSMXB6V2xobk4wTnBRV2RKUTBGblNVTkJa","MGxEUVdkSlIzQXhZek5TY0ZwdWEzUlpNamwxWkVkV2RXUkViMmRaTWxaMVpF","ZFdlVTkzYjJkSlEwRm5TVU5CWjBsRFFXZEpRMEozV1ZkU2EyRlhOVzVQYVVG","NVRVaENORWxFUlRGalNHYzNRMmxCWjBsRFFXZEpRMEZuWmxGdlMwbERRV2RK","UTBGblNVTkJkVmt5T1hWa1IwWndZbTFXZVVsSWMwdEpRMEZuU1VOQlowbERR","V2RKUTBGblpESnNhMlJIWnpaSlJFVjNUVU5WTjBOcFFXZEpRMEZuU1VOQlow","bERRV2RKUnpGb1pVTXhNMkZYVWpCaFJHOW5Ua1JCZDJOSVp6ZERhVUZuU1VO","QlowbERRV2RtVVc5TFNVTkJaMGxEUVdkSlEwRjFZVWRXYUZwSFZubEpTSE5M","U1VOQlowbERRV2RKUTBGblNVTkJaMlJIVmpSa1F6Rm9Za2RzYm1KcWIyZFpN","bFoxWkVkV2VVOTNiMmRKUTBGblNVTkJaMGxEUVdkSlEwSjBXVmhLYm1GWE5I","UlpiVGt3WkVjNWRFOXBRWHBOU0VJMFQzZHZaMGxEUVdkSlEwRm5TVWd3UzBs","RFFXZEpRMEZuU1VOQmRXRkhWbWhhUjFaNVNVZG5lRWxJYzJkYWJUbDFaRU14","ZW1GWWNHeFBhVUY0VEdwT2VWcFhNRGRKUjFwMlltNVJkR1F5Vm5CYU1tZ3dU","MmxCTkUxRVFUZEpSM2hzWkVoU2JHTnBNWHBqUjBacVlWYzFiazlwUVhoalNH","YzNTVWN4YUdOdFpIQmlhbTluVFVSeloxa3lPWE5pTTBrMlNVTk9iVnB0V1Rk","SlNEQkxTVU5CWjBsRFFXZEpRMEYxWVVkV2FGcEhWbmxKU0VGblpYbENiV0l5","TlRCTVdFNXdaVzFWTmtsRVFYVk9lbFo1V2xjd04wbEhUblppUnpsNVQybENN","bGxZU1c5TVV6RXdXbGhvTUV4WFVuQmlVMnMzU1VjeGFHTnRaSEJpYVRFd1lq","TkJOa2xFVm5kbFJITm5abEZ2UzBsRFFXZEpRMEZuU1VOQmRrdHBRbEZSVm14","T1VsVTFWVWxHVGtaVVJWWkVWa1U1VTBsRGIzWkRhVUZuU1VOQlowbERRV2RN","YmtKb1pWY3hiR0p1VVhSYU0wcHdXa05DTjBOcFFXZEpRMEZuU1VOQlowbERR","V2RKUjFKd1l6TkNjMWxZYXpaSlIyUjVZVmRSTjBOcFFXZEpRMEZuU1VOQlow","bERRV2RKUjJSNVlWZFJkR1JIVm5SalIzaG9aRWRWZEZreU9YTmtWekYxWTNw","dlowMVhXbmxKUkVadFkycHpTMGxEUVdkSlEwRm5TVU5CWjBsRFFXZGFNa1oz","VDJsQmVFMUlRalJQZDI5blNVTkJaMGxEUVdkSlEwRm5TVU5DZEZsWVNtNWhW","elIwV1cwNU1HUkhPWFJQYVVGNVRVaENORTkzYjJkSlEwRm5TVU5CWjBsSU1F","dERhVUZuU1VOQlowbERRV2RNYmtKb1pWTXhhV1JITkdkbGQyOW5TVU5CWjBs","RFFXZEpRMEZuU1VOQ2FWbFhUbkphTTBwMlpGYzFhMDlwUWpKWldFbHZURk14","YWxsWVNtdExWSE5MU1VOQlowbERRV2RKUTBGblNVTkJaMWx0T1hsYVIxWjVU","MmxCZUdOSVoyZGpNamx6WVZkUloyUnRSbmxMUXpCMFdXMDVlVnBIVm5sTFZI","TkxTVU5CWjBsRFFXZEpRMEZuU1VOQloxbHRPWGxhUjFaNVRGaEthRnBIYkRG","amVtOW5UVlJLZDJWRWMwdEpRMEZuU1VOQlowbERRV2RKUTBGblkwZEdhMXBI","YkhWYWVtOW5UVlJXZDJWRFFURmpTR2MzUTJsQlowbERRV2RKUTBGblNVTkJa","MGxIVGpGamJrNTJZMnB2WjJOSE9YQmlibEpzWTJwelMwbERRV2RKUTBGblNV","TkJaMGxEUVdka1NFcG9ZbTVPY0dSSGJIWmlhbTluV1ZkNGMwbEVRWFZOTTAx","bldsZEdlbHBVYzB0SlEwRm5TVU5CWjBsRFFXZEpRMEZuWkVkV05HUkRNV2hp","UjJ4dVltcHZaMWt5Vm5Wa1IxWjVUM2R2WjBsRFFXZEpRMEZuU1Vnd1MwTnBR","V2RKUTBGblNVTkJaMHh1UW1obFV6RnBaRWMwWjB4dFNqQmlhVEZ6V1ZkS2JH","SkRRamRKUjFwMlltNVJkR1F5Vm5CYU1tZ3dUMmxCTTAxRVFUZEpSMXAyWW01","UmRHTXliRFphVkc5blRVTTBORTVZU214aVZITm5XVEk1YzJJelNUWkpTRnBv","WTJsbmRFeFlVbXhsU0ZGMFdrZHNkRXRVYzJkbVVXOUxTVU5CWjBsRFFXZEpR","MEYxWTBkR05VeFhTakJpYVRWb1dUTlNjR1J0Vm1KYVIwWXdXVk14TUdWWVFt","eFFVMHByV1ZjMWFFbHNNR2RsZVVKcFlqTkthMXBZU1hSWk1qbHpZak5KTmts","SVdtaGphV2QwVEZkU2FHSnRSWEJQZVVKcFdWZE9jbG96U25aa1Z6VnJUMmxD","ZVZveVNtaExSRUZ6U1VSRmVVOVRkMmROYWxVeFRFTkJkMHhxUVRGTFZITm5a","bEZ2WjBsRFFXZEpRMEZuU1VNMWQxbFlhM1JaYmxKMVRHMUdhbVJIYkRKYVZu","UnJXVmhTYUV4WVVqVmpSMVU1U1cxa2RtTkhSalZKYkRCblpYbENhV0l6U210","YVdFbDBXVEk1YzJJelNUWkpTRnBvWTJsbmRFeFhaSFpqUjBZMVMxUnpaMWx0","Um1waE1tUjVZak5XZFZwRWIyZGpiV1JwV1ZObmQweERRWGxOVkVGelNVUkZk","MDVwZDJkTlF6UjNUbE5yTjBsSU1FdEpRMEZuU1VOQlowbERRWFZqUjBZMVRG","ZEtNR0pwTldoWk0xSndaRzFXWWxwSFJqQlpVekV3WlZoQ2JGQlRTblprYlRo","cFdGTkNOMGxIU25aamJWSnNZMmt4YW1JeWVIWmphbTluWkcxR2VVdERNSFJp","TTFwMlMxUnpaMWx0Um1waE1tUjVZak5XZFZwRWIyZGpiV1JwV1ZObmVFMTZa","M05KUkZGNlRFTkJlVTFxV1hOSlJFRjFUVVJWY0U5NVFqbERhVUZuU1VOQlow","bERRV2RNYmtKb1pWTXhhV1JITkhWWlYwNHdZVmhhYkZjeVVtaGtSMFYwWkVo","c2QxcFVNR2xqTWxab1dXMUdkV0Y1U21SSlNITm5XVzA1ZVZwSFZubE1WMDUy","WWtjNWVVOXBRakpaV0VsdlRGTXhlbHBYUm1sWlZ6VnlTMVJ6WjFsdFJtcGhN","bVI1WWpOV2RWcEViMmRqYldScFdWTm5lVTVVVlhOSlJHdDNURU5CZDB4RFFY","ZE1ha0V4UzFSeloyWlJiMmRKUTBGblNVTkJaMGxETlhkWldHdDBXVzVTZFV4","dFJtcGtSMnd5V2xOQmRWbHVVblZNVjNob1dXMVdjMGxJYzJkWk1qbHpZak5K","TmtsRFRtMWFiVmszU1Vnd1MwTnBRV2RKUTBGblNVTkJaMHg1YjJkU1JXeFVW","VVY0UWxkVFFrUlJWa3BGU1VOb1NWTlZVa1ZTVlRSd1NVTnZka05wUVdkSlEw","Rm5TVU5CWjBreU1XaGhWelZFV1ZoS2EwbEljMHRKUTBGblNVTkJaMGxEUVdk","SlEwRm5Xa2RzZW1OSGVHaGxWRzluWW0wNWRWcFVjMHRKUTBGblNVTkJaMGxE","UVdkSlEwRm5XVzFHYW1FeVpIbGlNMVoxV2tSdlowbDZRbXROUjFGM1drUnpT","MGxEUVdkSlEwRm5TVU5CWjBsRFFXZFpiVGw1V2tkV2VVeFlTbWhhUjJ3eFkz","cHZaMDFxUW5kbFJITkxTVU5CWjBsRFFXZEpRMEZuU1VOQloyTkhSbXRhUjJ4","MVducHZaMDFxVm5kbFJITkxTVU5CWjBsRFFXZEpRMEZuU1VOQloxbHRPWGxh","UjFaNVQybEJlR05JWjJkak1qbHpZVmRSWjJSdFJubExRekIwV1cwNWVWcEhW","bmxMVkhOTFNVTkJaMGxEUVdkSlEwRm5TVU5CWjJSSFZqUmtRekZvWWtkc2Jt","SnFiMmRaTWxaMVpFZFdlVTkzYjJkSlEwRm5TVU5CWjBsRFFXZEpRMEowV1Zo","S2JtRlhOSFJaYlRrd1pFYzVkRTlwUVhsTlNFSTBUM2R2WjBsRFFXZEpRMEZu","U1VOQlowbERRbWxpTTJkMFl6Sm9hRnBIT1ROUGFVRjNTVVJGZDJOSVoyZE5l","a0ozWlVOQ2VWb3lTbWhMUkVGelRVTjNkMHhFUVhWT1UyczNRMmxCWjBsRFFX","ZEpRMEZuWmxGdlMwbERRV2RKUTBGblNVTkJhbHBIYkhwalIzaG9aVlZLYUdK","dGMyZGxlVUp0WWpJMU1FeFlUbkJsYlZVMlNVUkJkVTR6U214aVZITm5XbTA1","ZFdSRE1UTmFWMnh1WVVoUk5rbEVaM2ROUkhObllrZFdNR1JIVm5sTVdFNTNX","VmRPY0dKdFl6WkpSRXAzWlVSeloxa3lPWE5pTTBrMlNVaGFhR05wWjNSTVYw","WnFaRWRzTWxwVE1XaFpNazVzWW01UmNFOTVRblJaV0VwdVlWYzBkRmx0T1RC","a1J6bDBUMmxCZUUxSVFqUlBlVUk1UTJsQlowbERRV2RKUTBGblRHMDFNV0pY","U214amFURnJZVmhPZDJKSFJqVkpTSE5uV20wNWRXUkRNWHBoV0hCc1QybEJl","RXhxV25sYVZ6QTNTVWRhZG1KdVVYUmtNbFp3V2pKb01FOXBRVFJOUkVFM1NV","Y3hhR050WkhCaWFtOW5UVlJDZDJWRFFYZFBlVUpxWWpKNGRtTnFiMmRKTWxw","dFdtcHpaMlpSYjJkSlEwRm5TVU5CWjBsRE5YVlpWekZzVEZkU2NHTXpRbk5a","V0d0blpYbENiV0l5TlRCTVdFNXdaVzFWTmtsRVFYVlBXRXBzWWxSeloxa3lP","WE5pTTBrMlNVaGFhR05wWjNSTVdGSnNaVWhSZEZwSGJIUkxWSE5uWWxkR2VW","b3liSFZNVjBwMlpFaFNkbUpVYjJkTmFrSjNaVVJ6WjJaUmIwdEpRMEZuU1VO","QlowbERRWFZaTWpsM1pWTXhhRmt6VW5CaU1qUm5aWGR2WjBsRFFXZEpRMEZu","U1VOQlowbERRbWxaVjA1eVdqTktkbVJYTld0UGFVSXlXVmhKYjB4VE1XaFpN","MUp3WkcxVmRGbFhUbXBhVnpVd1MxUnpTMGxEUVdkSlEwRm5TVU5CWjBsRFFX","ZFpNamx6WWpOSk5rbERUWGROUkVFM1NVZEtkbU50VW14amFtOW5ZbTA1ZFZw","VWMyZGtNbXhyWkVkbk5rbEVSWGROUTFVM1NVaENhRnBIVW5CaWJXTTJTVVJG","TUdOSVp6ZEpSMHAyWTIxU2JHTnBNWGxaVjFKd1pGaE5Oa2xFUlhkalNHYzNR","MmxCWjBsRFFXZEpRMEZuU1VOQlowbEhXblppYmxGMFpESldjRm95YURCUGFV","RTBUVVJCTjBsSFduWmlibEYwWXpKc05scFViMmROUXpRMFRsaEtiR0pVYzJk","Wk0xWjVZekk1ZVU5cFFuZGlNbXgxWkVkV2VVOTNiMmRKUTBGblNVTkJaMGxJ","TUV0RGFVRm5TVU5CWjBsRFFXZE1lVzluVlRGU1FsWkdWbFJKUms1R1VURlNT","bFF3TkdkVmExWkhVMVUxUmxKRFFYRk1kMjluU1VOQlowbERRV2RKUXpWNlpF","ZEdNR1JZVFhSWk1qbDFaRWRHY0dKdFZubEpTSE5MU1VOQlowbERRV2RKUTBG","blNVTkJaMWx0Um1waE1tUjVZak5XZFZwRWIyZGpiV1JwV1ZObmVVNVVWWE5K","UkVreFRsTjNaMDFxVlRGTVEwRjNUR3BCZVV0VWMwdEpRMEZuU1VOQlowbERR","V2RKUTBGbldXMDVlVnBIVm5sUGFVRjRZMGhuWjJNeU9YTmhWMUZuWkcxR2VV","dERNSFJaYlRsNVdrZFdlVXRVYzB0SlEwRm5TVU5CWjBsRFFXZEpRMEZuV1cw","NWVWcEhWbmxNV0Vwb1drZHNNV042YjJkTlZGcDNaVVJ6UzBsRFFXZEpRMEZu","U1VOQlowbERRV2RqUjBacldrZHNkVnA2YjJkTmFrSjNaVVJ6UzBsRFFXZEpR","MEZuU1VOQ09VTm5iMmRKUTBGblNVTkJaMGxETlhwa1IwWXdaRmhOZEdGSFZt","aGFSMVo1U1VoelMwbERRV2RKUTBGblNVTkJaMGxEUVdkYVIyeDZZMGQ0YUdW","VWIyZGFiWGhzWlVSelMwbERRV2RKUTBGblNVTkJaMGxEUVdkWlYzaHdXakkw","ZEdGWVVteGlXRTAyU1VkT2JHSnVVbXhqYW5OTFNVTkJaMGxEUVdkSlEwRm5T","VU5CWjFveVJuZFBhVUY0VFVoQ05FOTNiMmRKUTBGblNVTkJaMGxEUVdkSlEw","SjBXVmhLYm1GWE5IUlpiVGt3WkVjNWRFOXBRWGhPV0VJMFQzZHZaMGxEUVdk","SlEwRm5TVU5CWjBsRFFuZFpWMUpyWVZjMWJreFhTblprU0ZKMllsUnZaMDFV","UW5kbFJITkxTVU5CWjBsRFFXZEpRMEZuU1VOQloxbHRPWGxhUjFaNVRGZEtk","bVJJVW5aaVZHOW5UVmhDTkVsSVRuWmlSMnhyU1VoYWFHTnBaM1JNVjBwMlky","MVNiR05wYXpkRGFVRm5TVU5CWjBsRFFXZG1VVzlMU1VOQlowbERRV2RKUTBG","MVl6TlNhR1JJVm5wTVYyaHNXVmRTYkdOcFFtOU9RMEkzU1VjeGFHTnRaSEJp","YW05blRVUnpaMXB0T1hWa1F6RjZZVmh3YkU5cFFYZE1hbWg1V2xjd04wbEhU","blppUnpsNVQybEJhbHB0V20xUGVVSXdXbGhvTUV4WVVubFpWelY2V20wNWVX","SlViMmRrV0VKM1dsaEthbGxZVG14UGVVSnpXbGhTTUZwWVNYUmpNMEpvV1RK","c2RWcDZiMmROV0VJMFQzbENPVU5wUVdkSlEwRm5TVU5CWjB4dVRqQlpXRkl4","WTNreGIxcFhSbXRhV0VsbllWTkNOMGxIVG5aaVJ6bDVUMmxDTWxsWVNXOU1V","ekYyWW0xNGNHSnRWWEJQZVVKdFlqSTFNRXhZVG5CbGJWVTJTVVJCZFU5SVNt","eGlWSE5uWmxGdlMwbERRV2RKUTBGblNVTkJkVmx0Um5WaGVURjZaRWRHTUdS","WVRYUmFNMHB3V2tOQ04wTnBRV2RKUTBGblNVTkJaMGxEUVdkSlIxSndZek5D","YzFsWWF6WkpSMlI1WVZkUk4wTnBRV2RKUTBGblNVTkJaMGxEUVdkSlIyUjVZ","VmRSZEdSSFZuUmpSM2hvWkVkVmRGa3lPWE5rVnpGMVkzcHZaMDFYV25sSlJF","WnRZMnB6WjB4NWIyZE5hVUpNWWpKNGRtSlRRbWxoVjBaNVNVaEthR05IYTJk","YVIwWjFTVWRqWjJFeVZuZGlNMUoyWW0xalowdHBPRXRKUTBGblNVTkJaMGxE","UVdkSlEwRm5XakpHZDA5cFFYaE5ia0kwU1VSSmQyTklaemREYVVGblNVTkJa","MGxEUVdkbVVXOUxTVU5CWjBsRFFXZEpRMEYxV1cxR2RXRjVNWEJrUjFaMFNV","aHpTMGxEUVdkSlEwRm5TVU5CWjBsRFFXZGFSMng2WTBkNGFHVlViMmRhYlho","c1pVUnpTMGxEUVdkSlEwRm5TVU5CWjBsRFFXZFpWM2h3V2pJMGRHRllVbXhp","V0UwMlNVZE9iR0p1VW14amFuTkxTVU5CWjBsRFFXZEpRMEZuU1VOQloyRnVW","bnBrUjJ4dFpWTXhhbUl5TlRCYVZ6VXdUMmxDZW1OSFJtcGFVekZwV2xoU00x","cFhWblZQZDI5blNVTkJaMGxEUVdkSlEwRm5TVU5DYldJeU5UQk1XRTV3Wlcx","Vk5rbEVRWFZQU0Vwc1lsUnpTMGxEUVdkSlEwRm5TVU5CWjBsRFFXZGFiVGwx","WkVNeE0xcFhiRzVoU0ZFMlNVUlpkMDFFYzB0SlEwRm5TVU5CWjBsRFFXZEpR","MEZuV1RJNWMySXpTVFpKUTA1cFdXMUpOME5wUVdkSlEwRm5TVU5CWjJaUmIw","dEpRMEZuU1VOQlowbERRWFZqTTFKb1pFaFdla3hYYkhWYVIyeHFXVmhTZG1O","cFFqZERhVUZuU1VOQlowbERRV2RKUTBGblNVZFNjR016UW5OWldHczJTVWRh","YzFwWVp6ZERhVUZuU1VOQlowbERRV2RKUTBGblNVZEdjMkZYWkhWTVYyd3dX","bGN4ZWs5cFFtcGFWelV3V2xoSk4wTnBRV2RKUTBGblNVTkJaMGxEUVdkSlIy","Um9ZMFJ2WjA1dVFqUlBkMjluU1VOQlowbERRV2RKU0RCTFEybEJaMGxEUVdk","SlEwRm5URzFTZG1SRFFqZERhVUZuU1VOQlowbERRV2RKUTBGblNVaGtjRnBJ","VW05UGFVRXlZMGhuTjBOcFFXZEpRMEZuU1VOQlowbERRV2RKUjJoc1lWZGti","MlJFYjJkT2JrSTBUM2R2WjBsRFFXZEpRMEZuU1VOQlowbERRbWxpTTBwclds","aEpkR050Um10aFdGWjZUMmxCTVUxRFZUZERhVUZuU1VOQlowbERRV2RtVVc5","TFNVTkJaMGxEUVdkSlEwRjFXa2M1TUV4dE9YVkpTSE5uV1cxR2FtRXlaSGxp","TTFaMVdrUnZaMlJ0Um5sTFF6QjBZakkxYzJGWE5XeExWSE5uV1cwNU5FeFlU","bTlaVjFKMlpIcHZaMDFEUVhkSlJHaDNaVU5DTWxsWVNXOU1VekYyWW0xNGNH","SnRWWEJQZVVJNVEybEJaMGxEUVdkSlEwRm5URzFTZG1SRE5YWmFiVmxuWlhs","Q2FWbFhUbkphTTBwMlpGYzFhMDlwUWpKWldFbHZURk14ZGxwdFduTmhWelZz","UzFSeloxbHRPVFJNV0U1dldWZFNkbVI2YjJkTlEwRjNTVVJvZDJWRFFqSlpX","RWx2VEZNeGRscHRXbk5oVnpWc1MxUnpaMlpSYjJkSlEwRm5TVU5CWjBsQmIy","ZEpRMEZuU1VOQlowbEROWHBrUjBZd1pGaE5kR1JIVmpSa1EwSTNTVWRhZG1K","dVVYUmpNbXcyV2xSdlowMUROREpPV0Vwc1lsUnpaMlJIVmpSa1F6RXdZMjFH","ZFdNeVduWmpiVEEyU1VoV2QyTkhWbmxaTWtaNldsUnpaMXB0T1hWa1F6RXpX","bGRzYm1GSVVUWkpSR04zVFVSeloyWlJiMmRKUTBGblNVTkJaMGxETlRCYVdH","Z3dURmM1ZFVsSWMyZFpNamx6WWpOSk5rbElXbWhqYVdkMFRGYzVkV0pIYkhW","YVUyczNTVWd3UzBsRFFXZEpRMEZuU1VOQmRXUkhWalJrUXpGMldtMVpaMlY1","UW1waU1uaDJZMnB2WjJSdFJubExRekIwWWpKYWJXSkhiSFZhVTJzM1NVYzVk","MWxYVG5Ca1NHczJTVVJCZFU1NmMyZG1VVzlMU1VOQlowbERRV2RKUTBGMVdt","MDVkbVJIVm5sTVZ6VjJaRWRWWjJWM2IyZEpRMEZuU1VOQlowbERRV2RKUTBK","MFdWaEtibUZYTkhSa1J6bDNUMmxCZVUxSVFqUlBkMjluU1VOQlowbERRV2RK","UTBGblNVTkNNRnBZYURCTVYwWnpZVmRrZFU5cFFtcGFWelV3V2xoSk4wTnBR","V2RKUTBGblNVTkJaMGxEUVdkSlIxcDJZbTVSZEdNeWJEWmFWRzluVFVNME0y","TnRWblJQZDI5blNVTkJaMGxEUVdkSlEwRm5TVU5DYW1JeWVIWmphbTluWkcx","R2VVdERNSFJrUjFZMFpFTXhhMkZYTUhCUGQyOW5TVU5CWjBsRFFXZEpRMEZu","U1VOQ2MyRlhOV3hNVjJoc1lWZGtiMlJFYjJkTlV6UXhUM2R2WjBsRFFXZEpR","MEZuU1VOQlowbERRbmRaVjFKcllWYzFiazlwUVhkSlJFVjNZMGhuTjBOcFFX","ZEpRMEZuU1VOQloyWlJiMHRKUTBGblNVTkJaMGxEUWtGaE1sWTFXbTVLYUdK","WFZucEpTRTV6WVZkU2JGWllRV2RsZVVKdFkyMDVkRWxJYzJkaU0wSm9XVEpz","TUdWVWIyZE5SSE5uWkVoS2FHSnVUbTFpTTBwMFQybENNR050Um5Wak1uaG9a","RWRXV2t0RVJYZGpTR2R3VDNsQ09VbElVblpKU0hObllqTkNhRmt5YkRCbFZH","OW5UVlJ6WjJSSVNtaGliazV0WWpOS2RFOXBRakJqYlVaMVl6SjRhR1JIVmxw","TFJFRndUM2xDT1VsSU1FdEpRMEZuU1VOQlowbERRWFZaVnpWd1lsZEdNRnBU","UWpkSlIwWjFZVmN4YUdSSGJIWmlhbTluWXpKNGNGcEhWbFpqUTBGM1RHcE9l","a2xIVm1oak1sVjBZak5XTUVsSFduWmpibVJvWTIxU2VrOTVRamxEYVVGblNV","TkJPRXd6VGpCbFYzaHNVR2R2T0V3eWFHeFpWMUVyUTJwNGFXSXlValZRWjI5","TFVFZFNjR1JwUW1waVIwWjZZM293YVZreU9YVmtSMFp3WW0xV2VVbHFORXRK","UTBGblNVUjRhMkZZV1dkWk1uaG9Zek5OT1VsdGFHeFpWMUpzWTJsSkswTnBR","V2RKUTBGblNVTkJaMUJIWjNoUWRVdGpjME5FZDI1YVpXVTRTakpZYm1aRFpH","dzJXV2M0U2pKWWNIWkRaR3cyWm5kdVdtVnBPRW95V0hCbVEyUnNOV2htT0Vv","eVdHOHZRMlJzTlZSM2JscGxjemhLTWxodlVFTmtiRFZxZDI1YVpXZzRTakpZ","Y0hsRWFYVktibWx1VEVFNFRESm5lRkJuYjJkSlEwRm5TVU5CWjBsRWVIZFFk","WEZqYzJOdGNYbHdMMmgwU1VSTGJrOUhNR2tyUnpCblRXMHdTVTlITUcxTmJY","RjVjQzlLY1hOeFkwbFBSekJxWlVjd2FDdEhNRzByUnpCcUswY3dhR1ZITUdo","NVJHaDBTbXBvZEVsbWFIUkpNMHR0WlVjd1owMXhVRFJpVTBGNWIwUm9kRWxF","U25SRFJHaDBTVmhLY1dsRVMyMWxSekJuVDBjd2IyVkhNR2ROY1dOSlQwY3di","azF0TURSaVUySTBZbE5qTkdKVFRFbFBSekJxWlVjd2FEaHRNRFJpVTBFMFls","Tk9OR0pUV1hsaGNrdHVLMGN3YVN0SE1HZE5iVEJKVDBjd2FHVkhNR2dyUnpC","dEswY3daMDF0Y1hsd0wzZHVOVWRJVUVNNWQxQm5iMmRKUTBGblVFTTVhMkZZ","V1N0RFoyOW5TVU5CWjFCSFVuQmthVUpxWWtkR2VtTjZNR2xqUjBZMVlsZFdk","V1JETVc1amJXeHJTV28wUzBsRFFXZEpSSGhyWVZoWloxa3llR2hqTTAwNVNX","NUNhR1ZUTVdsa1J6UnBTVWRzYTFCVFNqQlpWMGwwV2tkR2RWbFRTV2RhUjBZ","d1dWTXhNR1ZZUW14UVUwcHJXVmMxYUVscFFuWmliVTV6WVZkT2NsQlRTbnBr","TW13d1dUSm9UbHBZVW05aU1sRnZTakpTYUdKdFJXNUxVMGtyUTJsQlowbERR","V2RKUTBGblVFaE9kMWxYTkdkWk1uaG9Zek5OT1VsdFNqQmlhVEZ6V1ZkS2JH","SkRTU3M0U2l0VGRHbEVkMjVhYVM4NFNqSlpkbEJEWkcxWmJuZHVXbWs0VUVN","NWVtTkhSblZRWjI5blNVTkJaMUJET1d0aFdGa3JRMmR2WjBsRFFXZFFSMUp3","WkdsQ2FtSkhSbnBqZWpCcFkwZEdOVXhYU2pCaWFVbG5ZVmRST1VsdVVtaFph","VEZ1WWpOQ2FHVlRTV2RhUjBZd1dWTXhNR1ZZUW14UVUwcHVZak5DYUdWVFNX","ZGlNalZxWWtkc2FtRjZNR2xqTTJSd1pFZE9iMVJYVmpCaFJ6bHJTME5rYm1J","elFtaGxVMk53U1dvMFMwbERRV2RKUTBGblNVTkJPR016UW1oaWFVSnFZa2RH","ZW1ONk1HbFpibEoxVEZkNGFGbHRWbk5KYWpkM2JqVkxNVWxRUTJSdFdVeDNi","bHB0U3poS01scHBMME5rYlV4NmQyNWFiVlZRUXpsNlkwZEdkVkJuYjJkSlEw","Rm5VRU01YTJGWVdTdERaMjluU1VOQloxQkhVbkJrYVVKcVlrZEdlbU42TUds","alIwWTFURmRLTUdKcFNXZGhWMUU1U1c1U2FGbHBNWFprYlRocFNVZFNhR1JI","UlhSa1NHeDNXbFF3YVdJelduWkphVUoyWW0xT2MyRlhUbkpRVTBwNlpESnNN","Rmt5YUU1YVdGSnZZakpSYjBveU9USmllV053U1dvMFMwbERRV2RKUTBGblNV","TkJPR016UW1oaWFVSnFZa2RHZW1ONk1HbFpibEoxVEZkNGFGbHRWbk5KYWpk","M2JqVkxNMGxRUTJSdFdYSjNibHB0VWpoS01scHBhbmQyWXpOQ2FHSnFORXRK","UTBGblNVUjNkbHBIYkRKUVoyOUxTVU5CWjBsRWVHdGhXRmxuV1RKNGFHTXpU","VGxKYmtKb1pWTXhhV1JITkdsSlIyeHJVRk5LTUZsWFNYUmpNbFpvV1cxR2RX","RjVTV2RhUjBZd1dWTXhNR1ZZUW14UVUwcDZXbGRHYVZsWE5YSkphVUoyWW0x","T2MyRlhUbkpRVTBwNlpESnNNRmt5YUU1YVdGSnZZakpSYjBvelRteFpWMHBv","WW0xemJrdFRTU3REYVVGblNVTkJaMGxEUVdkUVNFNTNXVmMwWjFreWVHaGpN","MDA1U1cxS01HSnBNWE5aVjBwc1lrTkpLemhLSzFOMFEwUjNibHB0VHpoS01s","cG5VRU5rYlV4NmQyNWFhVGs0U2pKWmRsQkRaRzFaYm5kdVdtMUhVRU01ZW1O","SFJuVlFaMjluU1VOQloxQkRPV3RoV0ZrclEyZHZaMGxEUVdkUVIxSndaR2xD","YW1KSFJucGplakJwWTBkR05VeFhTakJpYVVsbllWZFJPVWx1VW1oWmFURnBZ","MjFyYVVsSFVtaGtSMFYwWkVoc2QxcFVNR2xaYmtwd1NXbENkbUp0VG5OaFYw","NXlVRk5LZW1ReWJEQlpNbWhPV2xoU2IySXlVVzlLTWtwNVlWTmpjRWxxTkV0","SlEwRm5TVU5CWjBsRFFUaGpNMEpvWW1sQ2FtSkhSbnBqZWpCcFdXNVNkVXhY","ZUdoWmJWWnpTV28zZDI0MEsyMUpVRU5rYlV3emQyNWFiVTQ0U2pKYWFFUjNk","bU16UW1oaWFqUkxTVU5CWjBsRWQzWmFSMnd5VUdkdlMwbERRV2RKUkhocllW","aFpaMWt5ZUdoak0wMDVTVzVDYUdWVE1XbGtSelJwU1Vkc2ExQlRTakJaVjBs","MFdXMDFjRWxwUW10WldGSm9URmhTTldOSFZUbEpiVXAxWVZOSloySXlOV3Bp","UjJ4cVlYb3dhV016WkhCa1IwNXZWRmRXTUdGSE9XdExRMlJwWW0xcmJrdFRT","U3REYVVGblNVTkJaMGxEUVdkUVNFNTNXVmMwWjFreWVHaGpNMDA1U1cxS01H","SnBNWE5aVjBwc1lrTkpLemhLSzFCd2FVUjNibHBwT1RoS01scHBaa05rYlZs","Uk9Fd3pUbmRaVnpRclEybEJaMGxEUVRoTU1sSndaR28wUzBOcFFXZEpRMEU0","V2tkc01rbEhUbk5aV0U1NlVGTktkMWxZYTNSWmJsSjFTV2xDY0ZwRU1HbGtS","MFpwVEZkS2FsbFRTV2RhUjBZd1dWTXhNR1ZZUW14UVUwcHBXVEpGYVVsSE9Y","VlpNbmh3V1RKek9VbHVUak5oV0ZKcVlVVXhiR1JIYUhaYVEyZHVXVzFPYUVw","NWEybFFaMjluU1VOQlowbERRV2RKUkhoNlkwZEdkVWxIVG5OWldFNTZVRk5L","YVdSSE5IUmlSMFpwV2xkM2FWQjJRMlpxTmxsbk9Fb3lXWFptUTJSdFREZDNi","bHBwT0ZCRE9YcGpSMFoxVUdkdlowbERRV2RRUXpscllWaFpLME5uYjJkSlEw","Rm5VRWRTY0dScFFtcGlSMFo2WTNvd2FXTkhSalZNVjBvd1ltbEpaMkZYVVRs","SmJsSm9XV2t4ZEZsWE5XdGhXRXB3U1dsQ2ExbFlVbWhNV0ZJMVkwZFZPVWx0","TVdoaWJWSndZMjFyYVVsSE9YVlpNbmh3V1RKek9VbHVUak5oV0ZKcVlVVXhi","R1JIYUhaYVEyZHVZbGRHZFZwSGJIbGhVMk53U1dvMFMwbERRV2RKUTBGblNV","TkJPR016UW1oaWFVSnFZa2RHZW1ONk1HbFpibEoxVEZkNGFGbHRWbk5KYWpk","M2JqUXJiVWxRUTJSdFdXcDNibHBwT0RoS01scHBaa05rYlV3dmQyNWFiVVU0","U2pKYWFtWkRaRzFaVVRoTU0wNTNXVmMwSzBOcFFXZEpRMEU0VERKU2NHUnFO","RXRRUXpscllWaFpLME5uYjJkSlEwRm5VRWRTY0dScFFuQmFSREJwWWxkR2NH","SnJUbWhqYlZGcFVHZHZaMGxEUVdkSlEwRm5TVVI0YTJGWVdXZGhWMUU1U1cx","U2NHTXpRbk5aV0d4RFdWYzFja2xxTlU1U1ZsSkpWREJST0V3eVVuQmthalJM","U1VOQlowbERRV2RKUTBFNFl6TkNhR0pwUW1waVIwWjZZM293YVdKdVZuUlpi","Vlo1VEZkU2NHTXpRbk5aV0d0cFNVZHNhMUJUU210aFdFNTNZa2RHTlZSdVZu","UlpiVlo1U1dvMGQwMUVRWGROUkVGM1RVUjNkbU16UW1oaWFqUkxTVU5CWjBs","RFFXZEpRMEU0V2tkc01rbEhUbk5aV0U1NlVGTktkVmxYTVd4TVYxSndZek5D","YzFsWWEybEpSMnhyVUZOS2EyRllUbmRpUjBZMVZHMUdkRnBUU1N0VWEwWk9V","bFIzZGxwSGJESlFaMjluU1VOQlowbERRV2RKUkhocFpGaFNNR0l5TkdkWk1u","aG9Zek5OT1VsdFRuWmpTR3QwV1ZkT01HRlhPWFZKYVVKd1drUXdhVmt5T1hk","bFZVb3dZbWxKWjJJeU5XcGlSMnhxWVhvd2FWa3lPWGRsVmxwb1lraFdiRXRE","YTJsUVoyOW5TVU5CWjBsRFFXZEpRMEZuU1VOQk9HRlRRbXBpUjBaNlkzb3dh","VnB0Um5wSlIxcG9URmRPZG1OSWEybFFhbmQyWVZRMFoxRXdPVkZYVTBKUFZs","VXhRMUpXU1V0SlEwRm5TVU5CWjBsRFFUaE1Na294WkVoU2RtSnFORXRKUTBG","blNVUjNkbHBIYkRKUVoyOUxTVU5CWjBsRWVHdGhXRmxuV1RKNGFHTXpUVGxK","Yms0d1dWaFNNV041TVdwaU1qVXdXVmRzZFZwWVNXbFFaMjluU1VOQlowbERR","V2RKUkhocllWaFpaMWt5ZUdoak0wMDVTVzVPTUZsWVVqRmplVEZ2V2xkR2Ex","cFlTV2xRWjI5blNVTkJaMGxEUVdkSlEwRm5TVU5CT0dGVFFtcGlSMFo2WTNv","d2FWcHRSbnBKUjFwb1RGZEtkbUpJVVdsUWFuZDJZVlEwUzBsRFFXZEpRMEZu","U1VOQlowbERRV2RRUjJjd1VHeE9iR051V214amFVSlVaRWRHTUdSWVRUaE1N","bWN3VUdkdlowbERRV2RKUTBGblNVUjNkbHBIYkRKUVoyOW5TVU5CWjBsRFFX","ZEpRVzluU1VOQlowbERRV2RKUkhocllWaFpaMWt5ZUdoak0wMDVTVzFLYUdK","dGMzUmpNMUpvWkVoV2VreFhaSGxoVjFGcFVHZHZaMGxEUVdkSlEwRm5TVU5C","WjBsRFFUaGFSMnd5U1VkT2MxbFlUbnBRVTBwcFdWYzFja3hYYkRCYVZ6QnBV","R2R2WjBsRFFXZEpRMEZuU1VOQlowbERRV2RKUTBGblVFaE9kMWxYTkN0U1JV","WlBVVlIzZG1NelFtaGlhalJMU1VOQlowbERRV2RKUTBGblNVTkJaMGxEUVdk","SlJIaHJZVmhaWjFreWVHaGpNMDA1U1c1T01GbFlVakZqZVRGd1ltMVNjRmt5","UmpCaU0wbHBVR3A0ZW1OSFJuVkpSMDV6V1ZoT2VsQlRTbXRpTTFGbllqSTBh","VkJxZDNaak0wSm9ZbW8wT0dNelFtaGlhVUpxWWtkR2VtTjZNR2xqTTFKb1pF","aFdla3hZVW14bFNGRm5aRWRXTkdSRE1YWmlhVWtyVkRBME9Fd3pUbmRaVnpR","clVFTTVhMkZZV1N0RGFVRm5TVU5CWjBsRFFXZEpRMEZuU1VSM2RscEhiREpR","WjI5blNVTkJaMGxEUVdkSlEwRm5TVU5CT0ZwSGJESkpSMDV6V1ZoT2VsQlRT","bWxaVnpWeVRGZHNNRnBYTUdsUVoyOW5TVU5CWjBsRFFXZEpRMEZuU1VOQlow","bERRV2RRU0U1M1dWYzBLMUl3T1ZGUlZtczRURE5PZDFsWE5DdERhVUZuU1VO","QlowbERRV2RKUTBGblNVTkJaMGxEUVRoYVIyd3lTVWRPYzFsWVRucFFVMHA2","WkVkR01HUllUWFJoVnpWcllWZE9hR1JIT1hsSmFqUTRZek5DYUdKcFFtcGlS","MFo2WTNvd2FWcEhPVEJKUnpsMVNXbzBPRXd6VG5kWlZ6UXJVRWhPZDFsWE5H","ZFpNbmhvWXpOTk9VbHVUakJaV0ZJeFkza3hNRnBZYURCSlNGSnNaVWhSZEdJ","eU5HbFFhemxQVUVNNWVtTkhSblZRYW5kMldrZHNNbEJuYjJkSlEwRm5TVU5C","WjBsRFFXZEpRMEU0VERKU2NHUnFORXRKUTBGblNVTkJaMGxEUVdkSlEwRm5V","RWRTY0dScFFtcGlSMFo2WTNvd2FWbHRSblZoZVRGd1pFZFdkRWxxTkV0SlEw","Rm5TVU5CWjBsRFFXZEpRMEZuU1VOQlowbEVlSHBqUjBaMVVHczVWMVI2ZDNa","ak0wSm9ZbW8wUzBsRFFXZEpRMEZuU1VOQlowbERRV2RKUTBGblNVUjRhMkZZ","V1dkWk1uaG9Zek5OT1VsdVRqQlpXRkl4WTNreGNHSnRVbkJaTWtZd1lqTkph","VkJxZUhwalIwWjFTVWRPYzFsWVRucFFVMHByWWpOUloySXlOR2xRYW5kMll6","TkNhR0pxTkRoak0wSm9ZbWxDYW1KSFJucGplakJwWXpOU2FHUklWbnBNV0ZK","c1pVaFJaMlJIVmpSa1F6RjJZbWxKSzFRd05EaE1NMDUzV1ZjMEsxQkRPV3Ro","V0ZrclEybEJaMGxEUVdkSlEwRm5TVU5CWjBsRWQzWmFSMnd5VUdkdlowbERR","V2RKUTBGblNVTkJaMGxEUVRoYVIyd3lTVWRPYzFsWVRucFFVMHBwV1ZjMWNr","eFhiREJhVnpCcFVHZHZaMGxEUVdkSlEwRm5TVU5CWjBsRFFXZEpRMEZuVUVo","T2QxbFhOQ3RWTUZaQ1VXdEdUMU42ZDNaak0wSm9ZbW8wUzBsRFFXZEpRMEZu","U1VOQlowbERRV2RKUTBGblNVUjRhMkZZV1dkWk1uaG9Zek5OT1VsdVRqQlpX","Rkl4WTNreGNHSnRVbkJaTWtZd1lqTkphVkJxZUhwalIwWjFTVWRPYzFsWVRu","cFFVMHByWWpOUloySXlOR2xRYW5kMll6TkNhR0pxTkRoak0wSm9ZbWxDYW1K","SFJucGplakJwWXpOU2FHUklWbnBNV0ZKc1pVaFJaMlJIVmpSa1F6RjJZbWxK","SzFRd05EaE1NMDUzV1ZjMEsxQkRPV3RoV0ZrclEybEJaMGxEUVdkSlEwRm5T","VU5CWjBsRWQzWmFSMnd5VUdkdlowbERRV2RKUTBGblNVTkJaMGxEUVRoYVIy","d3lTVWRPYzFsWVRucFFVMHBwV1ZjMWNreFhiREJhVnpCcFVHZHZaMGxEUVdk","SlEwRm5TVU5CWjBsRFFXZEpRMEZuVUVoT2QxbFhOQ3RSYTA1Q1VFTTVlbU5I","Um5WUVoyOW5TVU5CWjBsRFFXZEpRMEZuU1VOQlowbERRV2RRUjFKd1pHbENh","bUpIUm5wamVqQnBZek5TYUdSSVZucE1WMngxV2tkc2FsbFlVblpqYVVrclVF","aE9kMWxYTkdkWk1uaG9Zek5OT1VsdFVuWmtRMEoyV20xWmFWQnFkM1pqTTBK","b1ltbzBPR016UW1oaWFVSnFZa2RHZW1ONk1HbGpNMUpvWkVoV2VreFlVbXhs","U0ZGblpFZFdOR1JETVhaYWJWbHBVR3M1UjFKcWQzWmpNMEpvWW1vME9Fd3lV","bkJrYWpSTFNVTkJaMGxEUVdkSlEwRm5TVU5CWjFCRE9XdGhXRmtyUTJsQlow","bERRV2RKUTBGblNVTkJaMGxFZUd0aFdGbG5XVEo0YUdNelRUbEpiVXBvWW0x","emRHRllVbXhpVTBrclEybEJaMGxEUVdkSlEwRm5TVU5CWjBsRFFXZEpRMEU0","WXpOQ2FHSnFOVU5WYTJzNFRETk9kMWxYTkN0RGFVRm5TVU5CWjBsRFFXZEpR","MEZuU1VOQlowbERRVGhhUjJ3eVNVZE9jMWxZVG5wUVUwcDZaRWRHTUdSWVRY","UmhWelZyWVZkT2FHUkhPWGxKYWpRNFl6TkNhR0pwUW1waVIwWjZZM293YVZw","SE9UQkpSemx0V21sSksxQkRPWHBqUjBaMVVHcDRlbU5IUm5WSlIwNXpXVmhP","ZWxCVFNucGtSMFl3WkZoTmRHUkhWalJrUTBJd1dsaG9NRXhYT1cxYWFVa3JW","REJhUjFCRE9YcGpSMFoxVUdwM2RscEhiREpRWjI5blNVTkJaMGxEUVdkSlEw","Rm5TVU5CT0V3eVVuQmthalJMU1VOQlowbERRV2RKUTBGblNVTkJaMUJIVW5C","a2FVSnFZa2RHZW1ONk1HbFpiVVoxWVhreGNHUkhWblJKYWpSTFNVTkJaMGxE","UVdkSlEwRm5TVU5CWjBsRFFXZEpSSGg2WTBkR2RWQnJTazlUVkhkMll6TkNh","R0pxTkV0SlEwRm5TVU5CWjBsRFFXZEpRMEZuU1VOQlowbEVlR3RoV0ZsbldU","SjRhR016VFRsSmJrNHdXVmhTTVdONU1YQmliVkp3V1RKR01HSXpTV2xRYW5o","NlkwZEdkVWxIVG5OWldFNTZVRk5LYTJJelVXZGlNbHB0U1dvME9Fd3pUbmRa","VnpRclVFaE9kMWxYTkdkWk1uaG9Zek5OT1VsdVRqQlpXRkl4WTNreE1GcFlh","REJKU0ZKc1pVaFJkR0l5V20xSmFqVlFVbXRaT0V3elRuZFpWelFyVUVNNWEy","RllXU3REYVVGblNVTkJaMGxEUVdkSlEwRm5TVVIzZGxwSGJESlFaMjluU1VO","QlowbERRV2RKUTBGblNVTkJPRnBIYkRKSlIwNXpXVmhPZWxCVFNtbFpWelZ5","VEZkc01GcFhNR2xRWjI5blNVTkJaMGxEUVdkSlEwRm5TVU5CWjBsRFFXZFFT","RTUzV1ZjMEsxUlZSazlTUld4VFUxUjNkbU16UW1oaWFqUkxTVU5CWjBsRFFX","ZEpRMEZuU1VOQlowbERRV2RKUkhocllWaFpaMWt5ZUdoak0wMDVTVzVPTUZs","WVVqRmplVEZ3WW0xU2NGa3lSakJpTTBscFVHcDRlbU5IUm5WSlIwNXpXVmhP","ZWxCVFNtdGlNMUZuWWpKYWJVbHFORGhNTTA1M1dWYzBLMUJJVG5kWlZ6Um5X","VEo0YUdNelRUbEpiazR3V1ZoU01XTjVNVEJhV0dnd1NVaFNiR1ZJVVhSaU1s","cHRTV28xVUZKcldUaE1NMDUzV1ZjMEsxQkRPV3RoV0ZrclEybEJaMGxEUVdk","SlEwRm5TVU5CWjBsRWQzWmFSMnd5VUdkdlowbERRV2RKUTBGblNVUjNkbHBI","YkRKUVoyOW5TVU5CWjFCRE9XdGhXRmtyUTJkdlowbERRV2RRUjFKd1pHbENh","bUpIUm5wamVqQnBXbTA1ZG1SSFZubE1WelYyWkVkVmFWQm5iMmRKUTBGblNV","TkJaMGxFZUhCSlIwNXpXVmhPZWxCVFNtMVpXRTFuV20xRmRHRlhOVzFpZVRG","cVlWaEthbUpIVldsUWFuZDJZVlEwWjFVeVZuTmFXRTVvWVZkMGFHSnBRbmRh","VnpGcFdWaHNhR050Um5WSlIzaG9Za2hWWjJFeWJIbGhWekJuV1c1V2NtUkhh","MmRrU0Vwb1ltNU9iVnBZU1dkaE1sVm5VVmRTZEdGWE5HZGtWelV3WkZkeloy","UnRWbmxoVjFwd1lUSkdlbUZUTkV0SlEwRm5TVVIzZGxwSGJESlFaMjg0VERK","U2NHUnFORXREYW5oNldUTktjR05JVVN0RGFVRm5TVU5DYW1JeU5YcGtRMEpG","VVZaU1FrbEVNR2RsZDI5blNVTkJaMGxEUVdkSlEyUnJXVmMxYUVwNmIyZGxl","VUZMU1VOQlowbERRV2RKUTBGblNVTkJaMWx0Um5WaGVtOW5TakJTUWxSclJX","ZFdNRVpOVkVWV1ZVcDVkMmREYVVGblNVTkJaMGxEUVdkSlEwRm5TVWMxTVdK","WFNteGphbTluU25wQk5FMTZaM3BOUkdkM1RYcFJNMDVEWTNOSlFXOW5TVU5C","WjBsRFFXZEpRMEZuU1VOQ2RWbFhNV3hQYVVGdVZGaFdiMWxYTVdoYVEwSktZ","a2N4Y0VwNWQyZERhVUZuU1VOQlowbERRV2RKUTBGblNVZE9kbUpIT1hsUGFV","RnVTWHBCZDA5RVJtMWFhV05uUTJsQlowbERRV2RKUTBGblpsTjNTME5wUVdk","SlEwRm5TVU5CWjBveVpIWmpSMFkxU25wdloyVjVRVXRKUTBGblNVTkJaMGxE","UVdkSlEwRm5XVzFHZFdGNmIyZEtNR1JRVlVWR1drbEdaRUpVUlhoR1ZrTmpj","MGxCYjJkSlEwRm5TVU5CWjBsRFFXZEpRMEoxWkZjeGFWcFlTVFpKUTJOM1Qw","Uk5ORTE2UVRSTlJFMHdUbnBSYmt4RFFVdEpRMEZuU1VOQlowbERRV2RKUTBG","blltMUdkRnBVYjJkS01ERXhZVWRHZEZsWFVXZFRWM2gwWVZOamMwbEJiMmRK","UTBGblNVTkJaMGxEUVdkSlEwSnFZako0ZG1OcWIyZEtlVTEzVFVkUmVVNXRS","VzVKUVc5blNVTkJaMGxEUVdkSlNEQnpRMmR2WjBsRFFXZEpRMEZuU1VOa2Rt","UnRPRzVQYVVJM1NVRnZaMGxEUVdkSlEwRm5TVU5CWjBsRFFtbFpWelZ5VDJs","QmJsUXhXbEJKUm1SQ1ZFVjRSbFpEWTNOSlFXOW5TVU5CWjBsRFFXZEpRMEZu","U1VOQ2RXUlhNV2xhV0VrMlNVTm1hVzVaZDJkVVYwWndZbTVTYkdKdFJuVlpN","bFZ1VEVOQlMwbERRV2RKUTBGblNVTkJaMGxEUVdkaWJVWjBXbFJ2WjBvd01U","RmhSMFowV1ZkUloxTlhlSFJoVTJOelNVRnZaMGxEUVdkSlEwRm5TVU5CWjBs","RFFtcGlNbmgyWTJwdlowcDVUVFJaVkVwcFdsUkpia2xCYjJkSlEwRm5TVU5C","WjBsSU1ITkRaMjluU1VOQlowbERRV2RKUTJSNldsZEdhVmxYTlhKS2VtOW5a","WGxCUzBsRFFXZEpRMEZuU1VOQlowbERRV2RaYlVaMVlYcHZaMG94VGtaUlZV","cENWR3R6WjFGclJrOVRNR3hQVW5samMwbEJiMmRKUTBGblNVTkJaMGxEUVdk","SlEwSjFaRmN4YVZwWVNUWkpRMk0xVFVSRmQwOUVUWGRPZW1Nd1RsUkpia3hE","UVV0SlEwRm5TVU5CWjBsRFFXZEpRMEZuWW0xR2RGcFViMmRLTURFeFlVZEdk","RmxYVVdkVFYzaDBZVk5qYzBsQmIyZEpRMEZuU1VOQlowbERRV2RKUTBKcVlq","SjRkbU5xYjJkS2VVNXRXbXBXYUUxRVFXNUpRVzluU1VOQlowbERRV2RKU0RC","elEyZHZaMGxEUVdkSlEwRm5TVU5rYVdOdGEyNVBhVUkzU1VGdlowbERRV2RK","UTBGblNVTkJaMGxEUW1sWlZ6VnlUMmxCYmxGclJrOVRlVUpEVld0cmJreERR","VXRKUTBGblNVTkJaMGxEUVdkSlEwRm5ZbTVXZEZsdFZubFBhVUZ1TkhBeVRV","bEZNV2hoVnpVd1dsYzFhR0p0VG14S2VYZG5RMmxCWjBsRFFXZEpRMEZuU1VO","QlowbEhOV2hpVjFVMlNVTmtUbVJYYUdoaVYwWnJTVVZzYzJKWGEyNU1RMEZM","U1VOQlowbERRV2RKUTBGblNVTkJaMWt5T1hOaU0wazJTVU5qYWsxRVFURk5h","bXhxU25sQlMwbERRV2RKUTBGblNVTkNPVXhCYjB0SlEwRm5TVU5CWjBsRFFX","NVpiVFZ3U25wdloyVjVRVXRKUTBGblNVTkJaMGxEUVdkSlEwRm5XVzFHZFdG","NmIyZEtNRXBDVkd0eloxRnJOVXBLZVhkblEybEJaMGxEUVdkSlEwRm5TVU5C","WjBsSE5URmlWMHBzWTJwdlowb3JTMlJxUTBKT1dWZHNkV1JIVm5WWlZ6VnFX","bE5qYzBsQmIyZEpRMEZuU1VOQlowbERRV2RKUTBKMVdWY3hiRTlwUVc1VVdG","WnZXVmN4YUZwRFFrcGlSekZ3U25sM1owTnBRV2RKUTBGblNVTkJaMGxEUVdk","SlIwNTJZa2M1ZVU5cFFXNUpNbGw2VG0xWmVVMVRZMmREYVVGblNVTkJaMGxE","UVdkbVUzZExRMmxCWjBsRFFXZEpRMEZuU2pKS2FsbFRZelpKU0hOblEybEJa","MGxEUVdkSlEwRm5TVU5CWjBsSFNtaGliWE0yU1VOa1ExRlZOVXhKUlVwRVVW","TmpjMGxCYjJkSlEwRm5TVU5CWjBsRFFXZEpRMEoxWkZjeGFWcFlTVFpKUTJa","cGJsbDNaMVJYUm5CaWJsSnNZbTFHZFZreVZXNU1RMEZMU1VOQlowbERRV2RK","UTBGblNVTkJaMkp0Um5SYVZHOW5TakF4TVdGSFJuUlpWMUZuVTFkNGRHRlRZ","M05KUVc5blNVTkJaMGxEUVdkSlEwRm5TVU5DYW1JeWVIWmphbTluU25sTmQw","MUVXVEpaYWsxdVNVRnZaMGxEUVdkSlEwRm5TVWd3YzBObmIyZEpRMEZuU1VO","QlowbERaSFJaVnpWcllWaEtjRXA2YjJkbGVVRkxTVU5CWjBsRFFXZEpRMEZu","U1VOQloxbHRSblZoZW05blNqQktRbFJyYzJkVVZVWlBVa1ZzVTFOVFkzTkpR","VzluU1VOQlowbERRV2RKUTBGblNVTkNkV1JYTVdsYVdFazJTVU5tYVc1WmQy","ZFVWMFp3WW01U2JHSnRSblZaTWxWdVRFTkJTMGxEUVdkSlEwRm5TVU5CWjBs","RFFXZGliVVowV2xSdlowb3dNVEZoUjBaMFdWZFJaMU5YZUhSaFUyTnpTVUZ2","WjBsRFFXZEpRMEZuU1VOQlowbERRbXBpTW5oMlkycHZaMHA1VFhkTlJFNW9U","MGRaYmtsQmIyZEpRMEZuU1VOQlowbElNRXRKUTBGblNVZ3dOME5uYjJkSlEw","Rm5XbTVXZFZrelVuQmlNalJuWXpOa2NHUkhUbTlVVjFZd1lVYzVhMHRIZEd4","bFUydG5aWGR2WjBsRFFXZEpRMEZuU1VkT2RtSnVUakJKUjA1b1kyMVJaMUJU","UW10aU1rNHhZbGRXZFdSRE5XNWFXRkpHWWtkV2RGcFhOVEJSYm14S1drTm5i","bUpYUm5CaWEwNW9ZMjFSYmt0VWMwdEpRMEZuU1VOQlowbERRbXBaV0VwclRH","NU9NR1ZYZUd4TWJWSndZek5DYzFsWWEyZFFVMEZ1V1cxNGRsa3ljMjVQZDI5","blNVTkJaMGxEUVdkSlFXOW5TVU5CWjBsRFFXZEpSMUoyV1ROV2RGcFhOVEJN","YmtZeFdsaEtOVlV5Vm5OYVYwNHdZak5LUW1KSGQyOUtlVFYzV1ZocmRGbHVV","blZLZVd0TFNVTkJaMGxEUVdkSlEwRm5TVU5CWjB4dFduWmphMVpvV1RKbmIx","bHBRVGxRYVVKcFRHMU9jMWxZVG5wVVIyeDZaRU0xZVZwWE1YWmtiVlZ2U2pK","R2FtUkhiREphVTJOd1MxUnpTME5wUVdkSlEwRm5TVU5CWjFwSE9XcGtWekZz","WW01UmRWb3lWakJTVjNoc1lsZFdkV1JGU2pWVFYxRnZTak5TYUZscE1HNUpR","M05uWVRKV05VdFJiMmRKUTBGblNVTkJaMGxEUVdkSlEwRjFXVEo0YUdNelRr","MWhXRTR3VEcxR2ExcERaMjVaVjA0d1lWaGFiRXA1YXpkRGFVRm5TVU5CWjBs","RFFXZERhVUZuU1VOQlowbERRV2RaTWpsMVl6TlJaMkZZVW14aVUwRTVTVVZT","UWxaRlJtSmhNbFkxV0ZSelMwTnBRV2RKUTBGblNVTkJaMWt5Um5sYVF6VnFZ","a2RHZW1Nd2VIQmpNMUYxWTIxV2RHSXpXbXhMUTJSb1ltMXNkRmxZVW14S2VX","czNRMmxCWjBsRFFXZEpRMEZuWkcwNWNGcERRbXBaV0VwclRHMDViVnB1VG14","a1JtUndXa2hTYjA5M2IyZEpRMEZuU1VOQlowbEhUbWhqYlZGMVdUSjRhR016","VGsxaFdFNHdURzFHYTFwRFoyNVpWelZ3WWxkR01GcFRZM0JQZDI5blNVTkJa","MGxEUVdkSlFXOW5TVU5CWjBsRFFXZEpSMUoyV1ROV2RGcFhOVEJNYldSc1pF","VldjMXBYTVd4aWJsSkRaVlZzYTB0RFpHdGhXRTUzWWtkR05WRnRSblZoZVdO","d1RHMXNkV0p0Vm5sV1IxWTBaRU5CT1VsSGJEQmFWekIxV1cxR2RXRjZjMHRK","UTBGblNVTkJaMGxEUW10aU1rNHhZbGRXZFdSRE5XNWFXRkpHWWtkV2RGcFhO","VEJSYm14S1drTm5ibHBIYkhwalIzaG9aVlUxTVdKWFNteGphV053VEcxc2RX","SnRWbmxXUjFZMFpFTkJPVWxIYkRCYVZ6QjFZbTVXZEZsdFZubFBkMjluU1VO","QlowbERRV2RKUjFKMldUTldkRnBYTlRCTWJXUnNaRVZXYzFwWE1XeGlibEpE","WlZWc2EwdERaR3RoV0U1M1lrZEdOVlJ0Um5SYVUyTndURzFzZFdKdFZubFdS","MVkwWkVOQk9VbEhiREJhVnpCMVltMUdkRnBVYzB0RGFVRm5TVU5CWjBsRFFX","ZFpNa1o1V2tNMWVtUkliSE5hVXpWNldsaFNVV050T1hkYVdFb3daVk5uYmt4","VE1XaFpNMUp3WkcxVmRGbFhUbXBhVnpVd1NubDNaMkZZVW14aVV6VnFZako0","ZG1OcGF6ZERhVUZuU1VOQ09VTm5iMmRKUTBGbldtNVdkVmt6VW5CaU1qUm5X","VEk1ZDJWV1dtaGlTRlpzUzBOcloyVjNiMmRKUTBGblNVTkJaMGxIVG5aaWJr","NHdTVWMxTVdKVFFUbEpSMUoyV1ROV2RGcFhOVEJNYldSc1pFVldjMXBYTVd4","aWJsSkRaVlZzYTB0RFpHdGhXRTUzWWtkR05WUnVWblJaYlZaNVNubHJkV0ZY","TlhWYVdFcFZXbGhvTUU5M2IyZEpRMEZuU1VOQlowbEhUblppYms0d1NVZEtN","R0pwUVRsSlIxSjJXVE5XZEZwWE5UQk1iV1JzWkVWV2MxcFhNV3hpYmxKRFpW","VnNhMHREWkdwaU0wSTFVVzVTZFVwNWF6ZERaMjluU1VOQlowbERRV2RKUnpW","b1pHMXNibGxZVW5aamFUVnFZa2RzZDFsdE9XaGpiVkYxWkROS2NHUkhWbFZh","V0dnd1MwYzFNV0pUYTNWa1IyaHNZbWxuYjB0VFFUbFFhVUkzUTJsQlowbERR","V2RKUTBGblNVTkJaMGxIVG5aaWJrNHdTVWM1ZVdGWFpIQmliVVp6VmtkV05H","UkRRVGxKUjBvd1ltazFjR0p0Tld4amEyaFZWRlYzTjBOcFFXZEpRMEZuU1VO","QlowbERRV2RKUjBvd1ltazFjR0p0Tld4amEyaFZWRlYzWjFCVFFXNVFSMnRu","V1RKNGFHTXpUVGxKYlZwb1kzbENiVmxUTVdwaFIxWnFZWGxKSzFCRE9YQlFh","VUpFVkRGQ1NsSlZVV2hLZW5OTFNVTkJaMGxEUVdkSlEwRm5TVU5CWjJNeVZq","QldSMngwV2xjNU1XUkRaMjlMVTBFNVVHbENOME5wUVdkSlEwRm5TVU5CWjBs","RFFXZEpRMEZuU1VOQ2FXUkhOSFZoVnpWMVdsaEtTVlpGTVUxSlJEQm5Zak5L","Y0ZveWJIVlpWM2hWV2xob01FOTNiMmRKUTBGblNVTkJaMGxEUVdkSlEwSTVU","RU5CZVUxRVFYZExWSE5MU1VOQlowbERRV2RKUTBJNVMxUnpTMGxEUVdkSlNE","QkxVRU01ZWxrelNuQmpTRkVyUTJwM2RsbHRPV3RsVkRSTFVFTTViMlJITVhO","UVp6MDk="];
-let JsJstn = okQYOx.join("");
-let s2 = atob(JsJstn);
-let s1 = atob(s2);
-let s0 = atob(s1);
-document.write(decodeURIComponent(escape(s0)));
+    const DATA = {
+        'dana': { 
+            bank: 'DANA WALLET', 
+            number: '083830803474', 
+            name: 'Muhamad Ilmi', 
+            color: '#0081ff' 
+        },
+
+        'gopay': { 
+            bank: 'GOPAY WALLET', 
+            number: '083830803474', 
+            name: 'Muhamad Ilmi', 
+            color: '#00d26a' 
+        },
+
+        'ovo': { 
+            bank: 'OVO WALLET', 
+            number: '❌ Maintenance', 
+            name: 'Muhamad Ilmi', 
+            color: '#8a2be2' 
+        },
+
+        'seabank': { 
+            bank: 'SEABANK BANKING', 
+            number: '901083077452', 
+            name: 'Muhamad Ilmi', 
+            color: '#ff5a00' 
+        },
+
+        'bri': { 
+            bank: 'BANK BRI', 
+            number: '❌ Maintenance', 
+            name: 'Muhamad Ilmi', 
+            color: '#00529c' 
+        },
+
+        'bni': { 
+            bank: 'BANK BNI', 
+            number: '❌ Maintenance', 
+            name: 'Muhamad Ilmi', 
+            color: '#f36f21' 
+        },
+
+        'bca': { 
+            bank: 'BANK BCA', 
+            number: '❌ Maintenance', 
+            name: 'Muhamad Ilmi', 
+            color: '#0066b3' 
+        },
+
+        'mandiri': { 
+            bank: 'BANK MANDIRI', 
+            number: '❌ Maintenance', 
+            name: 'Muhamad Ilmi', 
+            color: '#003a8f' 
+        }
+    };
+
+    function switchMethod(key) {
+        const card = document.getElementById('mainCard');
+        card.style.display = 'block';
+        
+        document.querySelectorAll('.pay-btn')
+            .forEach(b => b.classList.remove('active'));
+
+        document.getElementById('tab-' + key)
+            .classList.add('active');
+        
+        const item = DATA[key];
+
+        card.classList.remove('animate');
+        void card.offsetWidth;
+        card.classList.add('animate');
+        
+        document.getElementById('displayBank').innerText = item.bank;
+        document.getElementById('displayNumber').innerText = item.number;
+        document.getElementById('displayName').innerText = item.name;
+
+        card.style.setProperty('--active-accent', item.color);
+    }
+
+    function copyValue() {
+        const num = document.getElementById('displayNumber').innerText;
+        const btn = document.getElementById('copyBtn');
+
+        navigator.clipboard.writeText(num).then(() => {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        });
+    }
 </script>
+</body>
+</html>
