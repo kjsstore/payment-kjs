@@ -2,129 +2,285 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KJS Store | Premium Gateway</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>KJS STORE | PREMIUM PAYMENT GATEWAY</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --bg: #000000;
-            --card: #0a0a0a;
-            --border: rgba(255, 255, 255, 0.08);
+            --bg-dark: #05070a;
+            --bg-card: rgba(15, 20, 30, 0.7);
+            --border-glow: rgba(250, 204, 21, 0.25);
             --text-main: #ffffff;
-            --text-dim: #999999;
+            --text-dim: #8a8f9e;
+            --text-gold: #facc15;
             --dana: #0081ff;
             --gopay: #00d26a;
             --ovo: #8a2be2;
             --seabank: #ff5a00;
+            --bca: #0066b3;
+            --bri: #00529c;
+            --bni: #f36f21;
+            --mandiri: #003a8f;
             --online: #00ff88;
             --offline: #ff3e3e;
         }
 
         body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: url('background.png') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    padding: 20px 15px;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    z-index: -1;
-}
-
-.container {
-    width: 100%;
-    max-width: 400px;
-}
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0a0f1c, #03060c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+            position: relative;
         }
-        .header h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: 1px; margin: 0; color: #fff; }
-        .header p { font-size: 0.75rem; color: var(--text-dim); margin-top: 5px; }
 
-        /* PAYMENT SELECTOR */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><path fill="none" stroke="%23facc15" stroke-width="1" d="M0 0 L1000 1000 M1000 0 L0 1000"/><circle cx="500" cy="500" r="300" stroke="%23facc15" stroke-width="0.5" fill="none"/><circle cx="500" cy="500" r="200" stroke="%23facc15" stroke-width="0.5" fill="none"/><circle cx="500" cy="500" r="100" stroke="%23facc15" stroke-width="0.5" fill="none"/></svg>') repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* HEADER PREMIUM */
+        .header-premium {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .glow-icon {
+            font-size: 3rem;
+            color: var(--text-gold);
+            filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.5));
+            margin-bottom: 10px;
+        }
+
+        .header-premium h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--text-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .header-premium p {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-premium {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(250, 204, 21, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            border-radius: 40px;
+            padding: 4px 14px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-gold);
+            margin-top: 12px;
+        }
+
+        /* PAYMENT GRID */
         .payment-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .pay-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px 5px;
+            background: rgba(10, 15, 25, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(250, 204, 21, 0.15);
+            border-radius: 16px;
+            padding: 14px 5px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
         }
 
-        .pay-btn .btn-label { font-weight: 700; font-size: 0.85rem; color: var(--text-dim); }
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(250, 204, 21, 0.4);
+        }
 
-        .pay-btn.active[data-type="dana"] { border-color: var(--dana); background: rgba(0, 129, 255, 0.05); }
-        .pay-btn.active[data-type="gopay"] { border-color: var(--gopay); background: rgba(0, 210, 106, 0.05); }
-        .pay-btn.active[data-type="ovo"] { border-color: var(--ovo); background: rgba(138, 43, 226, 0.05); }
-        .pay-btn.active[data-type="seabank"] { border-color: var(--seabank); background: rgba(255, 90, 0, 0.05); }
-        .pay-btn.active .btn-label { color: #fff; }
+        .pay-btn .btn-label {
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
 
-        /* DISPLAY CARD (HIDDEN) */
+        .pay-btn .btn-label i {
+            font-size: 1.2rem;
+        }
+
+        .pay-btn.active {
+            border-width: 1.5px;
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
+        }
+
+        .pay-btn.active[data-type="dana"] { border-color: var(--dana); background: rgba(0, 129, 255, 0.08); }
+        .pay-btn.active[data-type="gopay"] { border-color: var(--gopay); background: rgba(0, 210, 106, 0.08); }
+        .pay-btn.active[data-type="ovo"] { border-color: var(--ovo); background: rgba(138, 43, 226, 0.08); }
+        .pay-btn.active[data-type="seabank"] { border-color: var(--seabank); background: rgba(255, 90, 0, 0.08); }
+        .pay-btn.active[data-type="bca"] { border-color: var(--bca); background: rgba(0, 102, 179, 0.08); }
+        .pay-btn.active[data-type="bri"] { border-color: var(--bri); background: rgba(0, 82, 156, 0.08); }
+        .pay-btn.active[data-type="bni"] { border-color: var(--bni); background: rgba(243, 111, 33, 0.08); }
+        .pay-btn.active[data-type="mandiri"] { border-color: var(--mandiri); background: rgba(0, 58, 143, 0.08); }
+
+        .pay-btn.active .btn-label {
+            color: #fff;
+        }
+
+        /* MAIN CARD - DETAIL PEMBAYARAN */
         #mainCard {
             display: none;
-            background: #0d0d0d;
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(13, 18, 28, 0.95), rgba(8, 12, 20, 0.95));
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 28px 24px;
+            border: 1px solid rgba(250, 204, 21, 0.25);
             text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        #displayBank { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--active-accent); margin-bottom: 10px; }
-        .number-display { font-size: 1.6rem; font-weight: 800; margin: 10px 0; color: #fff; }
-        .name-display { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 20px; }
+        #mainCard::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.05), transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        #displayBank {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--active-accent, var(--text-gold));
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .number-display {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 12px 0;
+            color: #fff;
+            letter-spacing: 1px;
+            word-break: break-all;
+        }
+
+        .name-display {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(250, 204, 21, 0.2);
+        }
 
         .copy-action {
-            background: var(--active-accent);
-            color: #000; border: none; width: 100%; padding: 14px; border-radius: 10px;
-            font-weight: 800; font-size: 0.85rem; cursor: pointer;
+            background: var(--active-accent, var(--text-gold));
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        /* STATUS SECTION REFINED */
+        .copy-action:hover {
+            transform: scale(0.98);
+            filter: brightness(1.1);
+        }
+
+        /* STATUS SERVER - PREMIUM STYLE */
         .status-container {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            background: rgba(10, 15, 25, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(250, 204, 21, 0.15);
+            border-radius: 24px;
             padding: 20px;
+            margin-bottom: 20px;
         }
 
         .status-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.15);
         }
 
-        .status-header h4 { margin: 0; font-size: 0.8rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
-        .status-header i { color: var(--online); font-size: 0.8rem; }
+        .status-header i {
+            color: var(--text-gold);
+            font-size: 0.9rem;
+        }
+
+        .status-header h4 {
+            margin: 0;
+            font-size: 0.75rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
 
         .bank-status-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Kolom biar rapi dan g kepotong */
-            gap: 12px 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px 20px;
         }
 
         .bank-item {
@@ -133,136 +289,161 @@ body::before {
             justify-content: space-between;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #bbb;
+            color: #cbd5e6;
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
-        .dot.on { background: var(--online); box-shadow: 0 0 8px var(--online); }
-        .dot.off { background: var(--offline); box-shadow: 0 0 8px var(--offline); }
-        
-        .status-text { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; }
+        .dot.on {
+            background: var(--online);
+            box-shadow: 0 0 8px var(--online);
+            animation: pulse-green 1.5s infinite;
+        }
+
+        .dot.off {
+            background: var(--offline);
+            box-shadow: 0 0 4px var(--offline);
+        }
+
+        @keyframes pulse-green {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .status-text {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
         .text-on { color: var(--online); }
-        .text-off { color: var(--offline); opacity: 0.7; }
+        .text-off { color: var(--offline); opacity: 0.6; }
 
+        /* FOOTER NOTE */
         .footer-note {
-            margin-top: 20px;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-dim);
-            line-height: 1.5;
-            padding: 0 10px;
+            line-height: 1.6;
+            padding: 16px 10px;
+            background: rgba(10, 15, 25, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(250, 204, 21, 0.08);
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate { animation: slideUp 0.3s ease-out forwards; }
+        .footer-note i {
+            color: var(--text-gold);
+            margin-right: 5px;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: slideUp 0.35s ease-out forwards;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 450px) {
+            .payment-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            .pay-btn { padding: 10px 3px; }
+            .pay-btn .btn-label { font-size: 0.6rem; }
+            .pay-btn .btn-label i { font-size: 1rem; }
+            .number-display { font-size: 1.3rem; }
+            .bank-status-grid { gap: 10px; }
+            .bank-item { font-size: 0.7rem; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>✰ 𝗞𝗝𝗦 𝗦𝗧𝗢𝗥𝗘_𝗣𝗔𝗬𝗠𝗘𝗡𝗧 ⸙✰</h1>
-        <p>ꜱɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴍᴇᴛᴏᴅᴇ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴅɪ ʙᴀᴡᴀʜ ᴜɴᴛᴜᴋ ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ᴅᴇᴛᴀɪʟ👇</p>
+    <div class="header-premium">
+        <div class="glow-icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <h1>KJS STORE</h1>
+        <p>⚡ PREMIUM PAYMENT GATEWAY ⚡</p>
+        <div class="badge-premium">
+            <i class="fas fa-shield-alt"></i> 100% AMAN & TERPERCAYA
+        </div>
     </div>
 
     <div class="payment-grid">
-    <div class="pay-btn" id="tab-dana" data-type="dana" onclick="switchMethod('dana')">
-        <span class="btn-label">💶 𝘿𝘼𝙉𝘼</span>
+        <div class="pay-btn" id="tab-dana" data-type="dana" onclick="switchMethod('dana')">
+            <div class="btn-label"><i class="fas fa-wallet"></i> DANA</div>
+        </div>
+        <div class="pay-btn" id="tab-gopay" data-type="gopay" onclick="switchMethod('gopay')">
+            <div class="btn-label"><i class="fas fa-mobile-alt"></i> GOPAY</div>
+        </div>
+        <div class="pay-btn" id="tab-ovo" data-type="ovo" onclick="switchMethod('ovo')">
+            <div class="btn-label"><i class="fas fa-qrcode"></i> OVO</div>
+        </div>
+        <div class="pay-btn" id="tab-seabank" data-type="seabank" onclick="switchMethod('seabank')">
+            <div class="btn-label"><i class="fas fa-landmark"></i> SEABANK</div>
+        </div>
+        <div class="pay-btn" id="tab-bca" data-type="bca" onclick="switchMethod('bca')">
+            <div class="btn-label"><i class="fas fa-building-columns"></i> BCA</div>
+        </div>
+        <div class="pay-btn" id="tab-bri" data-type="bri" onclick="switchMethod('bri')">
+            <div class="btn-label"><i class="fas fa-building-columns"></i> BRI</div>
+        </div>
+        <div class="pay-btn" id="tab-bni" data-type="bni" onclick="switchMethod('bni')">
+            <div class="btn-label"><i class="fas fa-building-columns"></i> BNI</div>
+        </div>
+        <div class="pay-btn" id="tab-mandiri" data-type="mandiri" onclick="switchMethod('mandiri')">
+            <div class="btn-label"><i class="fas fa-building-columns"></i> MANDIRI</div>
+        </div>
     </div>
-
-    <div class="pay-btn" id="tab-gopay" data-type="gopay" onclick="switchMethod('gopay')">
-        <span class="btn-label">💵 𝙂𝙊𝙋𝘼𝙔</span>
-    </div>
-
-    <div class="pay-btn" id="tab-ovo" data-type="ovo" onclick="switchMethod('ovo')">
-        <span class="btn-label">💷 𝙊𝙑𝙊</span>
-    </div>
-
-    <div class="pay-btn" id="tab-seabank" data-type="seabank" onclick="switchMethod('seabank')">
-        <span class="btn-label">💴 𝙎𝙀𝘼𝘽𝘼𝙉𝙆</span>
-    </div>
-
-    <div class="pay-btn" id="tab-bri" data-type="bri" onclick="switchMethod('bri')">
-        <span class="btn-label">🏦 𝘽𝙍𝙄</span>
-    </div>
-
-    <div class="pay-btn" id="tab-bni" data-type="bni" onclick="switchMethod('bni')">
-        <span class="btn-label">🏦 𝘽𝙉𝙄</span>
-    </div>
-
-    <div class="pay-btn" id="tab-bca" data-type="bca" onclick="switchMethod('bca')">
-        <span class="btn-label">🏦 𝘽𝘾𝘼</span>
-    </div>
-
-    <div class="pay-btn" id="tab-mandiri" data-type="mandiri" onclick="switchMethod('mandiri')">
-        <span class="btn-label">🏦 𝙈𝘼𝙉𝘿𝙄𝙍𝙄</span>
-    </div>
-</div>
 
     <div id="mainCard">
-        <div id="displayBank">METHOD</div>
-        <span class="number-display" id="displayNumber">00000000</span>
-        <div class="name-display" id="displayName">NAME</div>
+        <div class="card-icon" id="cardIcon"><i class="fas fa-credit-card"></i></div>
+        <div id="displayBank">PILIH METODE</div>
+        <div class="number-display" id="displayNumber">— — — —</div>
+        <div class="name-display" id="displayName">— — — —</div>
         <button class="copy-action" id="copyBtn" onclick="copyValue()">
-            <i class="fas fa-copy"></i> COPY NUMBER
+            <i class="fas fa-copy"></i> SALIN NOMOR
         </button>
     </div>
 
     <div class="status-container">
         <div class="status-header">
             <i class="fas fa-bolt"></i>
-            <h4>Server Status</h4>
+            <h4>• SISTEM ONLINE •</h4>
         </div>
-        
         <div class="bank-status-grid">
-            <div class="bank-item">
-                <span>DANA</span>
-                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
-            </div>
-            <div class="bank-item">
-                <span>GOPAY</span>
-                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
-            </div>
-            <div class="bank-item">
-                <span>OVO</span>
-                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
-            </div>
-            <div class="bank-item">
-                <span>SEABANK</span>
-                <div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ON</span></div>
-            </div>
-            <div class="bank-item">
-                <span>BCA</span>
-                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
-            </div>
-            <div class="bank-item">
-                <span>BRI</span>
-                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
-            </div>
-            <div class="bank-item">
-                <span>BNI</span>
-                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
-            </div>
-            <div class="bank-item">
-                <span>MANDIRI</span>
-                <div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFF</span></div>
-            </div>
+            <div class="bank-item"><span><i class="fas fa-wallet" style="margin-right:6px; font-size:0.7rem;"></i> DANA</span><div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ONLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-mobile-alt" style="margin-right:6px;"></i> GOPAY</span><div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ONLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-qrcode" style="margin-right:6px;"></i> OVO</span><div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ONLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-landmark" style="margin-right:6px;"></i> SEABANK</span><div class="status-indicator"><span class="dot on"></span><span class="status-text text-on">ONLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-building-columns"></i> BCA</span><div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFFLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-building-columns"></i> BRI</span><div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFFLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-building-columns"></i> BNI</span><div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFFLINE</span></div></div>
+            <div class="bank-item"><span><i class="fas fa-building-columns"></i> MANDIRI</span><div class="status-indicator"><span class="dot off"></span><span class="status-text text-off">OFFLINE</span></div></div>
         </div>
     </div>
 
     <div class="footer-note">
-        <i class="fas fa-info-circle"></i> Selesaikan pembayaran lalu kirim bukti transfer ke Admin untuk verifikasi.
+        <i class="fas fa-info-circle"></i> Selesaikan pembayaran, lalu kirim bukti transfer ke Admin untuk verifikasi cepat.
+        <br>
+        <i class="fas fa-headset"></i> Support 24/7 • Garansi 100%
     </div>
 </div>
 
@@ -272,68 +453,69 @@ body::before {
             bank: 'DANA WALLET', 
             number: '083830803474', 
             name: 'Muhamad Ilmi', 
-            color: '#0081ff' 
+            color: '#0081ff',
+            icon: 'fa-wallet'
         },
-
         'gopay': { 
             bank: 'GOPAY WALLET', 
             number: '083830803474', 
             name: 'Muhamad Ilmi', 
-            color: '#00d26a' 
+            color: '#00d26a',
+            icon: 'fa-mobile-alt'
         },
-
         'ovo': { 
             bank: 'OVO WALLET', 
-            number: '❌ Maintenance', 
+            number: '083830803474', 
             name: 'Muhamad Ilmi', 
-            color: '#8a2be2' 
+            color: '#8a2be2',
+            icon: 'fa-qrcode'
         },
-
         'seabank': { 
-            bank: 'SEABANK BANKING', 
+            bank: 'SEABANK', 
             number: '901083077452', 
             name: 'Muhamad Ilmi', 
-            color: '#ff5a00' 
+            color: '#ff5a00',
+            icon: 'fa-landmark'
         },
-
-        'bri': { 
-            bank: 'BANK BRI', 
-            number: '❌ Maintenance', 
-            name: 'Muhamad Ilmi', 
-            color: '#00529c' 
-        },
-
-        'bni': { 
-            bank: 'BANK BNI', 
-            number: '❌ Maintenance', 
-            name: 'Muhamad Ilmi', 
-            color: '#f36f21' 
-        },
-
         'bca': { 
             bank: 'BANK BCA', 
-            number: '❌ Maintenance', 
+            number: '❌ TIDAK AKTIF', 
             name: 'Muhamad Ilmi', 
-            color: '#0066b3' 
+            color: '#0066b3',
+            icon: 'fa-building-columns'
         },
-
+        'bri': { 
+            bank: 'BANK BRI', 
+            number: '❌ TIDAK AKTIF', 
+            name: 'Muhamad Ilmi', 
+            color: '#00529c',
+            icon: 'fa-building-columns'
+        },
+        'bni': { 
+            bank: 'BANK BNI', 
+            number: '❌ TIDAK AKTIF', 
+            name: 'Muhamad Ilmi', 
+            color: '#f36f21',
+            icon: 'fa-building-columns'
+        },
         'mandiri': { 
             bank: 'BANK MANDIRI', 
-            number: '❌ Maintenance', 
+            number: '❌ TIDAK AKTIF', 
             name: 'Muhamad Ilmi', 
-            color: '#003a8f' 
+            color: '#003a8f',
+            icon: 'fa-building-columns'
         }
     };
 
+    let currentKey = 'dana';
+
     function switchMethod(key) {
+        currentKey = key;
         const card = document.getElementById('mainCard');
         card.style.display = 'block';
         
-        document.querySelectorAll('.pay-btn')
-            .forEach(b => b.classList.remove('active'));
-
-        document.getElementById('tab-' + key)
-            .classList.add('active');
+        document.querySelectorAll('.pay-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('tab-' + key).classList.add('active');
         
         const item = DATA[key];
 
@@ -344,22 +526,48 @@ body::before {
         document.getElementById('displayBank').innerText = item.bank;
         document.getElementById('displayNumber').innerText = item.number;
         document.getElementById('displayName').innerText = item.name;
+        document.getElementById('cardIcon').innerHTML = `<i class="fas ${item.icon}"></i>`;
 
         card.style.setProperty('--active-accent', item.color);
+        
+        // Jika nomor mengandung ❌ atau "TIDAK AKTIF", disable tombol copy
+        const copyBtn = document.getElementById('copyBtn');
+        if (item.number.includes('❌') || item.number.includes('TIDAK AKTIF')) {
+            copyBtn.disabled = true;
+            copyBtn.style.opacity = '0.5';
+            copyBtn.style.cursor = 'not-allowed';
+        } else {
+            copyBtn.disabled = false;
+            copyBtn.style.opacity = '1';
+            copyBtn.style.cursor = 'pointer';
+        }
     }
 
     function copyValue() {
-        const num = document.getElementById('displayNumber').innerText;
+        const numElement = document.getElementById('displayNumber');
+        const num = numElement.innerText;
         const btn = document.getElementById('copyBtn');
+
+        if (num.includes('❌') || num.includes('TIDAK AKTIF')) {
+            return;
+        }
 
         navigator.clipboard.writeText(num).then(() => {
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+            btn.innerHTML = '<i class="fas fa-check"></i> TERSALIN!';
             setTimeout(() => {
                 btn.innerHTML = originalText;
             }, 2000);
+        }).catch(() => {
+            btn.innerHTML = '<i class="fas fa-times"></i> GAGAL!';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> SALIN NOMOR';
+            }, 2000);
         });
     }
+
+    // Set default active (DANA)
+    switchMethod('dana');
 </script>
 </body>
 </html>
