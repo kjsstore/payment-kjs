@@ -93,19 +93,30 @@
             from { transform: scale(0.9); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+        
+        /* BANNER - TANPA GARIS LIST, MENGIKUTI UKURAN ASLI GAMBAR (LEBAR & PANJANG FULL) */
         .modal-banner {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
             margin-bottom: 20px;
-            border: 1px solid rgba(250,204,21,0.3);
+            text-align: center;
+            background: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none;
         }
         .modal-banner img {
-            width: 100%;
             display: block;
-            aspect-ratio: 3/1;
-            object-fit: cover;
+            margin: 0 auto;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            border-radius: 0;
+            object-fit: contain;
+            background: transparent;
         }
+        
         .modal-content h2 {
             color: var(--text-gold);
             font-size: 1.5rem;
@@ -389,11 +400,15 @@
 </head>
 <body>
 
-<!-- MODAL AWAL -->
+<!-- MODAL AWAL DENGAN BANNER RESPONSIF (UKURAN ASLI, TANPA GARIS LIST) -->
 <div id="welcomeModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-banner">
-            <img src="banner-kjs.png" alt="KJS STORE Banner" onerror="this.src='https://placehold.co/800x200/0a0f1c/facc15?text=KJS+STORE+PREMIUM'">
+            <!-- Banner mengikuti dimensi asli gambar (lebar & panjang penuh) tanpa garis tepi dan tanpa crop -->
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300'%3E%3Crect width='800' height='300' fill='%230a0f1c'/%3E%3Cpath d='M0,0 L800,0 L800,300 L0,300 Z' fill='url(%23grad)'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15' stop-opacity='0.2'/%3E%3Cstop offset='100%25' stop-color='%23d97706' stop-opacity='0.3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50%25' y='40%25' font-size='28' font-family='Arial, sans-serif' font-weight='bold' fill='%23facc15' text-anchor='middle' dominant-baseline='middle'%3E⚡ KJS STORE ⚡%3C/text%3E%3Ctext x='50%25' y='65%25' font-size='16' font-family='Arial, sans-serif' fill='%23e2e8f0' text-anchor='middle'%3EPremium Payment Gateway%3C/text%3E%3Ctext x='50%25' y='85%25' font-size='12' fill='%23a0aec0' text-anchor='middle'%3E✓ Transaksi Cepat | Aman | Terpercaya %3C/text%3E%3C/svg%3E"
+                 alt="KJS STORE PREMIUM BANNER"
+                 style="width: auto; max-width: 100%; height: auto;"
+                 onerror="this.onerror=null; this.src='https://placehold.co/800x300/0a0f1c/facc15?text=KJS+STORE+PREMIUM'">
         </div>
         <h2><i class="fas fa-crown"></i> Selamat Datang!</h2>
         <p>⚡ Selamat datang di KJS STORE - Premium Payment Gateway ⚡<br>
@@ -426,7 +441,7 @@
         </div>
     </div>
 
-    <!-- Payment Grid dengan logo PNG -->
+    <!-- Payment Grid dengan logo PNG (fallback placeholder) -->
     <div class="payment-grid">
         <div class="pay-btn" data-type="dana" onclick="switchMethod('dana')">
             <div class="btn-label"><img src="dana.png" alt="DANA" onerror="this.src='https://placehold.co/30x30?text=DANA'"> DANA</div>
@@ -494,6 +509,7 @@
 </div>
 
 <script>
+    // Data akun pembayaran (termasuk yang offline)
     const DATA = {
         'dana': { bank: 'DANA WALLET', number: '083830803474', name: 'Muhamad Ilmi', color: '#0081ff', icon: 'dana.png' },
         'gopay': { bank: 'GOPAY WALLET', number: '083830803474', name: 'Muhamad Ilmi', color: '#00d26a', icon: 'gopay.png' },
@@ -566,6 +582,7 @@
         });
     }
 
+    // Tombol lanjut dengan transisi smooth & menjaga konten banner original
     document.getElementById('btnLanjut').addEventListener('click', function() {
         const modal = document.getElementById('welcomeModal');
         const payment = document.getElementById('paymentContent');
@@ -576,7 +593,7 @@
         }, 300);
     });
 
-    // Inisialisasi awal (tidak ada metode terpilih)
+    // Inisialisasi tampilan awal (belum ada metode terpilih)
     document.getElementById('displayBank').innerText = 'PILIH METODE PEMBAYARAN';
     document.getElementById('displayNumber').innerText = '--';
     document.getElementById('displayName').innerText = 'Klik salah satu metode di atas';
